@@ -1,0 +1,80 @@
+package com.example.barmanagarfront.views;
+
+import com.example.barmanagarfront.MainLayout;
+import com.example.barmanagarfront.services.ApiDrinkService;
+import com.vaadin.flow.component.HasComponents;
+import com.vaadin.flow.component.HasStyle;
+import com.vaadin.flow.component.html.H1;
+import com.vaadin.flow.component.html.Main;
+import com.vaadin.flow.component.html.OrderedList;
+import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
+import com.vaadin.flow.component.orderedlayout.VerticalLayout;
+import com.vaadin.flow.component.select.Select;
+import com.vaadin.flow.router.PageTitle;
+import com.vaadin.flow.router.Route;
+import com.vaadin.flow.router.RouteAlias;
+
+import java.util.ArrayList;
+import java.util.List;
+
+@PageTitle("Categories Form")
+@Route(value = "List", layout = MainLayout.class)
+@RouteAlias(value = "list", layout = MainLayout.class)
+public class CategorisView extends Main implements HasComponents, HasStyle {
+
+    private final ApiDrinkService apiDrinkService;
+    private List<String> categories;
+
+    private OrderedList imageContainer;
+
+    public CategorisView(ApiDrinkService apiDrinkService) {
+        this.apiDrinkService = apiDrinkService;
+
+        constructUI();
+
+        initCategories(apiDrinkService);
+        categories.forEach(category -> imageContainer.add(new FormViewCard(category)));
+
+
+    }
+
+    private void initCategories(ApiDrinkService apiDrinkService)
+    {
+        try
+        {
+             categories = apiDrinkService.getDrinksCategories();
+        }
+        catch (NullPointerException exception)
+        {
+            exception.printStackTrace();
+            categories = new ArrayList<>();
+        }
+    }
+
+    private void constructUI() {
+        addClassNames("person-form-view", "max-w-screen-lg", "mx-auto", "pb-l", "px-l");
+
+        HorizontalLayout container = new HorizontalLayout();
+        container.addClassNames("items-center", "justify-between");
+
+        VerticalLayout headerContainer = new VerticalLayout();
+        VerticalLayout headerTitle = new VerticalLayout(new H1("Categories\n"));
+
+        headerTitle.addClassNames("mb-0", "mt-xl", "text-3xl");
+//        Paragraph description = new Paragraph("Royalty free photos and pictures, courtesy of Unsplash");
+//        description.addClassNames("mb-xl", "mt-0", "text-secondary");
+        headerContainer.add(headerTitle);
+
+        Select<String> sortBy = new Select<>();
+        sortBy.setLabel("Sort by");
+        sortBy.setItems("Popularity", "Newest first", "Oldest first");
+        sortBy.setValue("Popularity");
+
+        imageContainer = new OrderedList();
+        imageContainer.addClassNames("gap-m", "grid", "list-none", "m-0", "p-0");
+
+        container.add(headerTitle, sortBy);
+        add(container, imageContainer);
+
+    }
+}
