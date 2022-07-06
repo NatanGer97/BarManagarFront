@@ -22,7 +22,7 @@ import java.util.concurrent.Future;
 
 import static com.example.barmanagarfront.ResponseOfDrinksJson.DrinkList.*;
 
-@Route(value = "Inventory/:category",layout = MainLayout.class)
+@Route(value = "Cart/:category",layout = MainLayout.class)
 @PageTitle("Choose New Drinks")
 public class DrinksByCategoryView extends Main
         implements BeforeEnterObserver,HasComponents, HasStyle

@@ -19,8 +19,6 @@ public class ResponseOfDrinksJson
     public static class DrinkList
     {
         public ArrayList<ApiDrink> apiDrinkList;
-
-
     }
 
 

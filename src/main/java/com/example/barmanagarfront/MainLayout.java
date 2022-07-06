@@ -3,6 +3,7 @@ package com.example.barmanagarfront;
 import com.example.barmanagarfront.observers.IInventoryObserver;
 import com.example.barmanagarfront.services.ApiDrinkService;
 import com.example.barmanagarfront.views.CategorisView;
+import com.example.barmanagarfront.views.InventoryView;
 import com.vaadin.flow.component.applayout.AppLayout;
 import com.vaadin.flow.component.applayout.DrawerToggle;
 import com.vaadin.flow.component.button.Button;
@@ -30,7 +31,7 @@ public class MainLayout extends AppLayout implements IInventoryObserver
         this.apiDrinkService = apiDrinkService;
         DrawerToggle drawerToggle = new DrawerToggle();
 
-        H1 title = new H1("Unnamed Bar ");
+        H1 title = new H1("Unnamed Bar");
         title.getStyle()
                 .set("font-size", "var(--lumo-font-size-l)")
                 .set("margin", "0");
@@ -53,7 +54,7 @@ public class MainLayout extends AppLayout implements IInventoryObserver
         tabs.add(createTab(VaadinIcon.HOME, "Home", MainLayout.class));
         tabs.add(createTab(VaadinIcon.LINES_LIST, "Categories", CategorisView.class ));
         tabs.add(createTab(VaadinIcon.CART_O, "Added", CartView.class ));
-        tabs.add(createTab(VaadinIcon.GLASS, "Bar Inventory", CartView.class ));
+        tabs.add(createTab(VaadinIcon.GLASS, "Bar Inventory", InventoryView.class ));
 
 
 

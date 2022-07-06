@@ -118,8 +118,6 @@ public class CartView extends Main implements  HasComponents, HasStyle, IRemoveD
 
     }
 
-
-
     @Override
     public void onRemove()
     {
