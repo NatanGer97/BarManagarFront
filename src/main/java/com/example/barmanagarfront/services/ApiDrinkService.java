@@ -6,9 +6,11 @@ import com.example.barmanagarfront.models.BarDrink;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.web.client.RestTemplateBuilder;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.server.ServerErrorException;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -43,7 +45,7 @@ public class ApiDrinkService
   public ArrayList<ApiDrink> getDrinksByCategory(String categoryName)
   {
       System.out.println(categoryName);
-      String url = String.format("http://localhost:8080/supplier/category?param=%s",categoryName);
+      String url = String.format("http://localhost:8080/supplier/category?category=%s",categoryName);
       System.out.println(url);
       ResponseEntity<ResponseOfDrinksJson> forEntity = restTemplate.getForEntity(
               url, ResponseOfDrinksJson.class);
@@ -51,13 +53,25 @@ public class ApiDrinkService
       return forEntity.getBody().getDrinkList().getApiDrinkList();
   }
 
-  public void saveDrinkToInventory(BarDrink barDrink)
+  public HttpStatus saveDrinkToInventory(BarDrink barDrink)
   {
       String url = "http://localhost:8080/inventory/";
 
       ResponseEntity<BarDrink> savedDrink = restTemplate.postForEntity(url, barDrink, BarDrink.class);
       logger.info("Saved drink: " + savedDrink);
+      return savedDrink.getStatusCode();
+  }
 
+  public HttpStatus saveDrinksToInventory(List<BarDrink> barDrinks )
+  {
+      HttpStatus status = null;
+      for ( BarDrink barDrink : barDrinks )
+      {
+           status = saveDrinkToInventory(barDrink);
+
+      }
+
+      return status;
   }
 
 

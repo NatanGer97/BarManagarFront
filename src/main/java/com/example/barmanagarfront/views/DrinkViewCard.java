@@ -1,9 +1,8 @@
 package com.example.barmanagarfront.views;
 
 import com.example.barmanagarfront.ApiDrink;
-import com.example.barmanagarfront.BarInventoryManager;
+import com.example.barmanagarfront.CartOfDrinksManager;
 import com.example.barmanagarfront.models.BarDrink;
-import com.example.barmanagarfront.services.ApiDrinkService;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.html.*;
@@ -12,9 +11,6 @@ import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.textfield.NumberField;
 import com.vaadin.flow.component.textfield.TextArea;
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.stereotype.Component;
 
 
 public class DrinkViewCard extends ListItem {
@@ -69,6 +65,7 @@ public class DrinkViewCard extends ListItem {
         plusButton.getElement().setAttribute("aria-label", "Add item");
         plusButton.addClickListener(buttonClickEvent ->
         {
+            plusButton.setEnabled(false);
             BarDrink barDrink = new BarDrink();
             barDrink.setId(drink.getIdDrink());
             barDrink.setName(drink.getStrDrink());
@@ -77,7 +74,23 @@ public class DrinkViewCard extends ListItem {
             barDrink.setImage(drink.getStrDrinkThumb());
             barDrink.setPrice(drinkCost.getValue());
             barDrink.setRecommendedGlass(drink.getStrGlass());
-            BarInventoryManager.getInstance().addToInventory(barDrink);
+            System.out.println("APi" + apiDrink);
+            for ( int i = 0; i < 15; i++ )
+            {
+                String fieldName = String.format("strIngredient%s",(i+1));
+                try
+                {
+                    if (drink.getClass().getDeclaredField(fieldName).get(drink) != null){
+                        barDrink.addIngredient(String.valueOf(drink.getClass().getDeclaredField(fieldName).get(drink)));
+                    }
+                }
+                catch (IllegalAccessException | NoSuchFieldException e)
+                {
+                    e.printStackTrace();
+                }
+            }
+            CartOfDrinksManager.getInstance().addToInventory(barDrink);
+
             System.out.println(barDrink);
         });
 

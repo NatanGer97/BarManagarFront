@@ -2,17 +2,14 @@ package com.example.barmanagarfront;
 
 import com.example.barmanagarfront.models.BarDrink;
 import com.example.barmanagarfront.observers.IInventoryObserver;
-import com.example.barmanagarfront.services.ApiDrinkService;
-import org.springframework.boot.web.client.RestTemplateBuilder;
-import org.springframework.web.client.RestTemplate;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public final class BarInventoryManager
+public final class CartOfDrinksManager
 {
-    private static volatile BarInventoryManager inventoryManagerInstance;
-    private  ApiDrinkService apiDrinkService;
+    private static volatile CartOfDrinksManager inventoryManagerInstance;
+//    private  ApiDrinkService apiDrinkService;
 
     private ArrayList<BarDrink> drinksInventory;
 
@@ -24,13 +21,12 @@ public final class BarInventoryManager
 
     private List<IInventoryObserver> observers;
 
-    private BarInventoryManager()
+    private CartOfDrinksManager()
     {
-        RestTemplateBuilder restTemplateBuilder = new RestTemplateBuilder();
-        apiDrinkService = new ApiDrinkService(restTemplateBuilder);
+        /*RestTemplateBuilder restTemplateBuilder = new RestTemplateBuilder();
+        apiDrinkService = new ApiDrinkService(restTemplateBuilder);*/
         drinksInventory = new ArrayList<>();
         observers = new ArrayList<>();
-        System.out.println(apiDrinkService.getDrinksCategories().get(0) + "!!!!!!!!!!");
     }
     public void addObserver(IInventoryObserver observer)
     {
@@ -48,16 +44,16 @@ public final class BarInventoryManager
         observers.forEach(observer -> observer.OnSizeChanged(drinksInventory.size()));
     }
 
-    public static BarInventoryManager getInstance()
+    public static CartOfDrinksManager getInstance()
     {
-        BarInventoryManager inventoryManager = inventoryManagerInstance;
+        CartOfDrinksManager inventoryManager = inventoryManagerInstance;
         if ( inventoryManagerInstance != null )
             return inventoryManager;
-        synchronized (BarInventoryManager.class)
+        synchronized (CartOfDrinksManager.class)
         {
             if ( inventoryManagerInstance == null )
             {
-                inventoryManagerInstance = new BarInventoryManager();
+                inventoryManagerInstance = new CartOfDrinksManager();
             }
             return inventoryManagerInstance;
         }
@@ -73,7 +69,8 @@ public final class BarInventoryManager
 
     public void removeFromInventory(BarDrink barDrink)
     {
-        drinksInventory.remove(barDrink);
+        System.out.println(drinksInventory.remove(barDrink));
+
         notifySizeChanged();
     }
 

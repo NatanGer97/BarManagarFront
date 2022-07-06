@@ -4,22 +4,37 @@ import com.example.barmanagarfront.ResponseOfDrinksJson;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
+import java.util.List;
+
 
 @Data
-@NoArgsConstructor
 public class BarDrink{
     public String id;
     public String name;
     public String category;
     public String isAlcoholic;
-    public String[] ingredients;
+    public List<String> ingredients;
+//    public String[] ingredients;
     public String image;
     public Double price;
     public String recommendedGlass;
 
-//    public  BarDrink(ResponseOfDrinksJson.DrinkList.ApiDrink)
+    public BarDrink()
+    {
+        ingredients = new ArrayList<>();
+    }
 
-    public BarDrink(String id, String name, String category, String isAlcoholic,
+    public void addIngredient(String ingredient)
+    {
+        this.ingredients.add(ingredient);
+    }
+    public void removeIngredient(String ingredient)
+    {
+        this.ingredients.remove(ingredient);
+    }
+
+/*  public BarDrink(String id, String name, String category, String isAlcoholic,
                     String[] ingredients, String image, Double price, String recommendedGlass) {
         this.id = id;
         this.name = name;
@@ -29,5 +44,5 @@ public class BarDrink{
         this.image = image;
         this.price = price;
         this.recommendedGlass = recommendedGlass;
-    }
+    }*/
 }
