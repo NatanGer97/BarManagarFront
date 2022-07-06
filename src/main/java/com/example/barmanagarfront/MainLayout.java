@@ -31,7 +31,7 @@ public class MainLayout extends AppLayout implements IInventoryObserver
         this.apiDrinkService = apiDrinkService;
         DrawerToggle drawerToggle = new DrawerToggle();
 
-        H1 title = new H1("Unnamed Bar");
+        H1 title = new H1(" Bar ");
         title.getStyle()
                 .set("font-size", "var(--lumo-font-size-l)")
                 .set("margin", "0");
