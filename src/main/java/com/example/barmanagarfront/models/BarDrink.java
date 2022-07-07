@@ -1,8 +1,6 @@
 package com.example.barmanagarfront.models;
 
-import com.example.barmanagarfront.ResponseOfDrinksJson;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 import java.util.ArrayList;
 import java.util.List;

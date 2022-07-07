@@ -1,4 +1,4 @@
-package com.example.barmanagarfront;
+package com.example.barmanagarfront.views;
 
 import com.example.barmanagarfront.models.BarDrink;
 import com.example.barmanagarfront.observers.IInventoryObserver;

@@ -1,10 +1,10 @@
-package com.example.barmanagarfront;
+package com.example.barmanagarfront.views;
 
 
+import com.example.barmanagarfront.MainLayout;
 import com.example.barmanagarfront.models.BarDrink;
 import com.example.barmanagarfront.observers.IRemoveDrinkObserver;
 import com.example.barmanagarfront.services.ApiDrinkService;
-import com.example.barmanagarfront.views.DrinkBarCard;
 import com.vaadin.flow.component.HasComponents;
 import com.vaadin.flow.component.HasStyle;
 import com.vaadin.flow.component.button.Button;
@@ -27,15 +27,12 @@ import java.util.List;
 public class CartView extends Main implements  HasComponents, HasStyle, IRemoveDrinkObserver
 {
     private final ApiDrinkService apiDrinkService;
-    private final String emptyMsg = "You didnt add new drink";
     private final String titleMsg = "Selected drinks";
 
     private List<BarDrink> addedDrinks;
     private OrderedList imageContainer;
     private H1 title;
     private Button saveButton;
-
-
 
     public CartView(ApiDrinkService apiDrinkService)
     {
@@ -48,8 +45,14 @@ public class CartView extends Main implements  HasComponents, HasStyle, IRemoveD
     private void displayDrinks()
     {
         imageContainer.removeAll();
+        // get drinks that was added to inventory
         this.addedDrinks = CartOfDrinksManager.getInstance().getDrinksInventory();
 
+        buildDrinksView();
+    }
+
+    private void buildDrinksView()
+    {
         addedDrinks.forEach(barDrink ->
         {
             DrinkBarCard drinkBarCard = new DrinkBarCard(barDrink);
@@ -64,22 +67,15 @@ public class CartView extends Main implements  HasComponents, HasStyle, IRemoveD
 
         saveButton = new Button("Save");
         saveButton.addClickListener(buttonClickEvent -> {
-
-//            addedDrinks.forEach(barDrink -> apiDrinkService.saveDrinkToInventory(barDrink));
             try
             {
                 HttpStatus status = apiDrinkService.saveDrinksToInventory(addedDrinks);
                 if ( status == HttpStatus.CREATED)
                 {
-                    System.out.println("ok");
-                    Notification notification = Notification.show("Cart saved");
-                    notification.setDuration(2000);
-                    notification.addThemeVariants(NotificationVariant.LUMO_SUCCESS);
-                    notification.setPosition(Notification.Position.TOP_STRETCH);
+                    Notification notification = getNotificationItem("Cart saved");
                     notification.open();
                     CartOfDrinksManager.getInstance().getDrinksInventory().clear();
                     displayDrinks();
-
                 }
             }
             catch (Exception e)
@@ -90,10 +86,6 @@ public class CartView extends Main implements  HasComponents, HasStyle, IRemoveD
 
         HorizontalLayout container = new HorizontalLayout();
         container.addClassNames("items-center", "justify-between");
-
-        HorizontalLayout footerLayout = new HorizontalLayout();
-        footerLayout.add(saveButton);
-
 
         VerticalLayout headerContainer = new VerticalLayout();
 
@@ -114,8 +106,17 @@ public class CartView extends Main implements  HasComponents, HasStyle, IRemoveD
         headerTitle.add(title);
 
         container.add(headerTitle, saveButton);
-        add(container, imageContainer,footerLayout);
+        add(container, imageContainer);
 
+    }
+
+    private Notification getNotificationItem(String notificationMsg)
+    {
+        Notification notification = Notification.show(notificationMsg);
+        notification.setDuration(2000);
+        notification.addThemeVariants(NotificationVariant.LUMO_SUCCESS);
+        notification.setPosition(Notification.Position.TOP_STRETCH);
+        return notification;
     }
 
     @Override

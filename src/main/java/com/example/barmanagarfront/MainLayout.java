@@ -2,6 +2,8 @@ package com.example.barmanagarfront;
 
 import com.example.barmanagarfront.observers.IInventoryObserver;
 import com.example.barmanagarfront.services.ApiDrinkService;
+import com.example.barmanagarfront.views.CartOfDrinksManager;
+import com.example.barmanagarfront.views.CartView;
 import com.example.barmanagarfront.views.CategorisView;
 import com.example.barmanagarfront.views.InventoryView;
 import com.vaadin.flow.component.applayout.AppLayout;

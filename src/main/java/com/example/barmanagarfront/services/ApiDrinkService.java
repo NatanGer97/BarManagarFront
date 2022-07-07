@@ -1,7 +1,7 @@
 package com.example.barmanagarfront.services;
 
-import com.example.barmanagarfront.ApiDrink;
-import com.example.barmanagarfront.ResponseOfDrinksJson;
+import com.example.barmanagarfront.models.ApiDrink;
+import com.example.barmanagarfront.models.ResponseOfDrinksJson;
 import com.example.barmanagarfront.models.BarDrink;
 import com.example.barmanagarfront.models.ResponseOfInventoryDrink;
 import org.slf4j.Logger;

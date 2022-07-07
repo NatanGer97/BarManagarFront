@@ -1,6 +1,5 @@
 package com.example.barmanagarfront.views;
 
-import com.example.barmanagarfront.CartOfDrinksManager;
 import com.example.barmanagarfront.models.BarDrink;
 import com.example.barmanagarfront.observers.IRemoveDrinkObserver;
 import com.vaadin.flow.component.button.Button;

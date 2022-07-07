@@ -1,4 +1,4 @@
-package com.example.barmanagarfront;
+package com.example.barmanagarfront.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;

@@ -54,16 +54,15 @@ public class CategorisView extends Main implements HasComponents, HasStyle {
     private void constructUI() {
         addClassNames("person-form-view", "max-w-screen-lg", "mx-auto", "pb-l", "px-l");
 
-        HorizontalLayout container = new HorizontalLayout();
-        container.addClassNames("items-center", "justify-between");
+        HorizontalLayout contentContainer = new HorizontalLayout();
+        contentContainer.addClassNames("items-center", "justify-between");
 
         VerticalLayout headerContainer = new VerticalLayout();
-        VerticalLayout headerTitle = new VerticalLayout(new H1("Categories\n"));
+        VerticalLayout headerTitleContainer = new VerticalLayout();
+        H1 title = new H1("Categories\n");
 
-        headerTitle.addClassNames("mb-0", "mt-xl", "text-3xl");
-//        Paragraph description = new Paragraph("Royalty free photos and pictures, courtesy of Unsplash");
-//        description.addClassNames("mb-xl", "mt-0", "text-secondary");
-        headerContainer.add(headerTitle);
+        headerTitleContainer.addClassNames("mb-0", "mt-xl", "text-3xl");
+        headerContainer.add(headerTitleContainer);
 
         Select<String> sortBy = new Select<>();
         sortBy.setLabel("Sort by");
@@ -73,8 +72,8 @@ public class CategorisView extends Main implements HasComponents, HasStyle {
         imageContainer = new OrderedList();
         imageContainer.addClassNames("gap-m", "grid", "list-none", "m-0", "p-0");
 
-        container.add(headerTitle, sortBy);
-        add(container, imageContainer);
+        contentContainer.add(headerTitleContainer, sortBy);
+        add(contentContainer, imageContainer);
 
     }
 }

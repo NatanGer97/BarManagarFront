@@ -1,11 +1,10 @@
 package com.example.barmanagarfront.views;
 
-import com.example.barmanagarfront.ApiDrink;
+import com.example.barmanagarfront.models.ApiDrink;
 import com.example.barmanagarfront.MainLayout;
 import com.example.barmanagarfront.services.ApiDrinkService;
 import com.vaadin.flow.component.HasComponents;
 import com.vaadin.flow.component.HasStyle;
-import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.html.*;
 import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.icon.VaadinIcon;
@@ -15,12 +14,6 @@ import com.vaadin.flow.component.select.Select;
 import com.vaadin.flow.router.*;
 
 import java.util.ArrayList;
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
-
-import static com.example.barmanagarfront.ResponseOfDrinksJson.DrinkList.*;
 
 @Route(value = "Cart/:category",layout = MainLayout.class)
 @PageTitle("Choose New Drinks")
