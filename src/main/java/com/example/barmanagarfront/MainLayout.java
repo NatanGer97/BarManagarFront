@@ -1,7 +1,7 @@
 package com.example.barmanagarfront;
 
 import com.example.barmanagarfront.observers.IInventoryObserver;
-import com.example.barmanagarfront.services.ApiDrinkService;
+import com.example.barmanagarfront.services.SupplierService;
 import com.example.barmanagarfront.views.CartOfDrinksManager;
 import com.example.barmanagarfront.views.CartView;
 import com.example.barmanagarfront.views.CategorisView;
@@ -26,9 +26,9 @@ import com.vaadin.flow.router.RouterLink;
 @PageTitle("Main")
 public class MainLayout extends AppLayout implements IInventoryObserver
 {
-    private final ApiDrinkService apiDrinkService;
+    private final SupplierService apiDrinkService;
 
-    public MainLayout(ApiDrinkService apiDrinkService)
+    public MainLayout(SupplierService apiDrinkService)
     {
         this.apiDrinkService = apiDrinkService;
         DrawerToggle drawerToggle = new DrawerToggle();

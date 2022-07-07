@@ -2,7 +2,7 @@ package com.example.barmanagarfront.views;
 
 import com.example.barmanagarfront.models.ApiDrink;
 import com.example.barmanagarfront.MainLayout;
-import com.example.barmanagarfront.services.ApiDrinkService;
+import com.example.barmanagarfront.services.SupplierService;
 import com.vaadin.flow.component.HasComponents;
 import com.vaadin.flow.component.HasStyle;
 import com.vaadin.flow.component.html.*;
@@ -20,7 +20,7 @@ import java.util.ArrayList;
 public class DrinksByCategoryView extends Main
         implements BeforeEnterObserver,HasComponents, HasStyle
 {
-    private final ApiDrinkService drinkService;
+    private final SupplierService drinkService;
     String categoryName;
 
     private OrderedList imageContainer;
@@ -28,7 +28,7 @@ public class DrinksByCategoryView extends Main
     private H1 title;
     ArrayList<ApiDrink> drinksByCategory;
 
-    public DrinksByCategoryView(ApiDrinkService drinkService)
+    public DrinksByCategoryView(SupplierService drinkService)
     {
         this.drinkService = drinkService;
         constructUI();

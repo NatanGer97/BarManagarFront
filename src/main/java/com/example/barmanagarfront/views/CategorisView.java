@@ -1,7 +1,7 @@
 package com.example.barmanagarfront.views;
 
 import com.example.barmanagarfront.MainLayout;
-import com.example.barmanagarfront.services.ApiDrinkService;
+import com.example.barmanagarfront.services.SupplierService;
 import com.vaadin.flow.component.HasComponents;
 import com.vaadin.flow.component.HasStyle;
 import com.vaadin.flow.component.html.H1;
@@ -22,12 +22,12 @@ import java.util.List;
 @RouteAlias(value = "list", layout = MainLayout.class)
 public class CategorisView extends Main implements HasComponents, HasStyle {
 
-    private final ApiDrinkService apiDrinkService;
+    private final SupplierService apiDrinkService;
     private List<String> categories;
 
     private OrderedList imageContainer;
 
-    public CategorisView(ApiDrinkService apiDrinkService) {
+    public CategorisView(SupplierService apiDrinkService) {
         this.apiDrinkService = apiDrinkService;
 
         constructUI();
@@ -38,7 +38,7 @@ public class CategorisView extends Main implements HasComponents, HasStyle {
 
     }
 
-    private void initCategories(ApiDrinkService apiDrinkService)
+    private void initCategories(SupplierService apiDrinkService)
     {
         try
         {

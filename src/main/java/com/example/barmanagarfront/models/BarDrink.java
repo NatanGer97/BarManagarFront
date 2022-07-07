@@ -9,6 +9,7 @@ import java.util.List;
 @Data
 public class BarDrink{
     public String id;
+    public String idInApi;
     public String name;
     public String category;
     public String isAlcoholic;

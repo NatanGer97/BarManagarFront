@@ -3,8 +3,8 @@ package com.example.barmanagarfront.views;
 
 import com.example.barmanagarfront.MainLayout;
 import com.example.barmanagarfront.models.BarDrink;
-import com.example.barmanagarfront.observers.IRemoveDrinkObserver;
-import com.example.barmanagarfront.services.ApiDrinkService;
+import com.example.barmanagarfront.observers.IRemoveDrinkFromCartObserver;
+import com.example.barmanagarfront.services.InventoryService;
 import com.vaadin.flow.component.HasComponents;
 import com.vaadin.flow.component.HasStyle;
 import com.vaadin.flow.component.button.Button;
@@ -24,9 +24,9 @@ import java.util.List;
 
 @Route(value = "Cart",layout = MainLayout.class)
 @PageTitle("Bar | Cart of drinks")
-public class CartView extends Main implements  HasComponents, HasStyle, IRemoveDrinkObserver
+public class CartView extends Main implements  HasComponents, HasStyle, IRemoveDrinkFromCartObserver
 {
-    private final ApiDrinkService apiDrinkService;
+    private final InventoryService inventoryService;
     private final String titleMsg = "Selected drinks";
 
     private List<BarDrink> addedDrinks;
@@ -34,9 +34,9 @@ public class CartView extends Main implements  HasComponents, HasStyle, IRemoveD
     private H1 title;
     private Button saveButton;
 
-    public CartView(ApiDrinkService apiDrinkService)
+    public CartView(InventoryService service)
     {
-        this.apiDrinkService = apiDrinkService;
+        this.inventoryService = service;
         constructUI();
         displayDrinks();
 
@@ -55,7 +55,7 @@ public class CartView extends Main implements  HasComponents, HasStyle, IRemoveD
     {
         addedDrinks.forEach(barDrink ->
         {
-            DrinkBarCard drinkBarCard = new DrinkBarCard(barDrink);
+            CartDrinkBarCard drinkBarCard = new CartDrinkBarCard(barDrink);
             drinkBarCard.addObserver(this);
             imageContainer.add(drinkBarCard);
         });
@@ -69,7 +69,7 @@ public class CartView extends Main implements  HasComponents, HasStyle, IRemoveD
         saveButton.addClickListener(buttonClickEvent -> {
             try
             {
-                HttpStatus status = apiDrinkService.saveDrinksToInventory(addedDrinks);
+                HttpStatus status = inventoryService.saveDrinksToInventory(addedDrinks);
                 if ( status == HttpStatus.CREATED)
                 {
                     Notification notification = getNotificationItem("Cart saved");

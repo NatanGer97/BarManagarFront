@@ -44,9 +44,7 @@ public class DrinkViewCard extends ListItem {
 
         Span subtitle = new Span();
         subtitle.addClassNames("text-s", "text-secondary");
-//        subtitle.add(new RouterLink("Open",DrinksByCategoryView.class,
-//                new RouteParameters("category",category)));
-//        subtitle.setText("14$");
+
 
         TextArea description = new TextArea();
         description.addClassName("my-m");
@@ -66,7 +64,8 @@ public class DrinkViewCard extends ListItem {
         {
             plusButton.setEnabled(false);
             BarDrink barDrink = new BarDrink();
-            barDrink.setId(drink.getIdDrink());
+            barDrink.setIdInApi(drink.getIdDrink());
+            System.out.println(drink.getIdDrink());
             barDrink.setName(drink.getStrDrink());
             barDrink.setCategory(drink.getStrCategory());
             barDrink.setIsAlcoholic(drink.getStrAlcoholic());

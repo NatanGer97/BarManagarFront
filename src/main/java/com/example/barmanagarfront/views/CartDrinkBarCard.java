@@ -1,7 +1,7 @@
 package com.example.barmanagarfront.views;
 
 import com.example.barmanagarfront.models.BarDrink;
-import com.example.barmanagarfront.observers.IRemoveDrinkObserver;
+import com.example.barmanagarfront.observers.IRemoveDrinkFromCartObserver;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.html.Image;
@@ -17,12 +17,12 @@ import com.vaadin.flow.component.textfield.TextFieldVariant;
 import java.util.ArrayList;
 import java.util.List;
 
-public class DrinkBarCard extends ListItem
+public class CartDrinkBarCard extends ListItem
 {
     private BarDrink barDrink;
-    private List<IRemoveDrinkObserver> removeDrinkObservers;
+    private List<IRemoveDrinkFromCartObserver> removeDrinkObservers;
 
-    public DrinkBarCard(BarDrink barDrink)
+    public CartDrinkBarCard(BarDrink barDrink)
     {
         removeDrinkObservers = new ArrayList<>();
         this.barDrink = barDrink;
@@ -88,13 +88,13 @@ public class DrinkBarCard extends ListItem
         }
     }
 
-    public void addObserver(IRemoveDrinkObserver observer)
+    public void addObserver(IRemoveDrinkFromCartObserver observer)
     {
         removeDrinkObservers.add(observer);
     }
 
     public void notifyObservers()
     {
-        removeDrinkObservers.forEach(IRemoveDrinkObserver::onRemove);
+        removeDrinkObservers.forEach(IRemoveDrinkFromCartObserver::onRemove);
     }
 }

@@ -1,6 +1,6 @@
 package com.example.barmanagarfront.observers;
 
-public interface IRemoveDrinkObserver
+public interface IRemoveDrinkFromCartObserver
 {
     void onRemove();
 }
