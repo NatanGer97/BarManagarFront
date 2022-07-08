@@ -4,9 +4,11 @@ import com.example.barmanagarfront.MainLayout;
 import com.example.barmanagarfront.services.SupplierService;
 import com.vaadin.flow.component.HasComponents;
 import com.vaadin.flow.component.HasStyle;
+import com.vaadin.flow.component.Text;
 import com.vaadin.flow.component.html.H1;
 import com.vaadin.flow.component.html.Main;
 import com.vaadin.flow.component.html.OrderedList;
+import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.select.Select;
@@ -34,8 +36,6 @@ public class CategorisView extends Main implements HasComponents, HasStyle {
 
         initCategories(apiDrinkService);
         categories.forEach(category -> imageContainer.add(new FormViewCard(category)));
-
-
     }
 
     private void initCategories(SupplierService apiDrinkService)
@@ -58,11 +58,15 @@ public class CategorisView extends Main implements HasComponents, HasStyle {
         contentContainer.addClassNames("items-center", "justify-between");
 
         VerticalLayout headerContainer = new VerticalLayout();
+
         VerticalLayout headerTitleContainer = new VerticalLayout();
-        H1 title = new H1("Categories\n");
+        headerContainer.setAlignItems(FlexComponent.Alignment.CENTER);
 
         headerTitleContainer.addClassNames("mb-0", "mt-xl", "text-3xl");
         headerContainer.add(headerTitleContainer);
+
+        H1 title = new H1(new Text("Categories"));
+        headerTitleContainer.add(title);
 
         Select<String> sortBy = new Select<>();
         sortBy.setLabel("Sort by");
@@ -72,7 +76,7 @@ public class CategorisView extends Main implements HasComponents, HasStyle {
         imageContainer = new OrderedList();
         imageContainer.addClassNames("gap-m", "grid", "list-none", "m-0", "p-0");
 
-        contentContainer.add(headerTitleContainer, sortBy);
+        contentContainer.add(headerTitleContainer,sortBy);
         add(contentContainer, imageContainer);
 
     }

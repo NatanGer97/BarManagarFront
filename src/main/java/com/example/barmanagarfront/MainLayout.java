@@ -2,10 +2,7 @@ package com.example.barmanagarfront;
 
 import com.example.barmanagarfront.observers.IInventoryObserver;
 import com.example.barmanagarfront.services.SupplierService;
-import com.example.barmanagarfront.views.CartOfDrinksManager;
-import com.example.barmanagarfront.views.CartView;
-import com.example.barmanagarfront.views.CategorisView;
-import com.example.barmanagarfront.views.InventoryView;
+import com.example.barmanagarfront.views.*;
 import com.vaadin.flow.component.applayout.AppLayout;
 import com.vaadin.flow.component.applayout.DrawerToggle;
 import com.vaadin.flow.component.button.Button;
@@ -57,6 +54,7 @@ public class MainLayout extends AppLayout implements IInventoryObserver
         tabs.add(createTab(VaadinIcon.LINES_LIST, "Categories", CategorisView.class ));
         tabs.add(createTab(VaadinIcon.CART_O, "Added", CartView.class ));
         tabs.add(createTab(VaadinIcon.GLASS, "Bar Inventory", InventoryView.class ));
+        tabs.add(createTab(VaadinIcon.DENTAL_CHAIR, "Bar Seats", SeatView.class ));
 
 
 
