@@ -1,5 +1,6 @@
 package com.example.barmanagarfront;
 
+import com.example.barmanagarfront.Singeltones.CartOfDrinksManager;
 import com.example.barmanagarfront.observers.IInventoryObserver;
 import com.example.barmanagarfront.services.SupplierService;
 import com.example.barmanagarfront.views.*;

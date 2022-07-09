@@ -41,6 +41,7 @@ public class SeatView extends VerticalLayout implements ISeatStatusObserver
         setSizeFull();
         initSeatGrid();
         add(initTitle(),getContent());
+//        add(initTitle(),getContent());
     }
 
     private VerticalLayout initTitle()
@@ -59,7 +60,7 @@ public class SeatView extends VerticalLayout implements ISeatStatusObserver
     private void initSeatGrid()
     {
         this.seatGrid = new Grid<>(Seat.class,false);
-        seatGrid.setSizeFull();
+//        seatGrid.setSizeFull();
         seatGrid.setAllRowsVisible(true);
         seatGrid.addColumn(seat -> seat.getSeatNumber()).setHeader("Seat")
                 .setTextAlign(ColumnTextAlign.CENTER);
