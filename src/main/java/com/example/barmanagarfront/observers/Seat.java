@@ -11,9 +11,10 @@ public class Seat
 
     private boolean isSeatTaken;
 
-    public Seat()
+    public Seat(int num)
     {
-        this.seatNumber = getSeatCounter();
+        this.seatNumber = num;
+//        this.seatNumber = getSeatCounter();
         this.isSeatTaken = false;
         this.observers = new ArrayList<>();
     }

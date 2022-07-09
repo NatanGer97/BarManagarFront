@@ -34,7 +34,7 @@ public class SeatView extends VerticalLayout implements ISeatStatusObserver
         seats = new ArrayList<>();
         for ( int i = 0; i < 5; i++ )
         {
-            Seat seat = new Seat();
+            Seat seat = new Seat(i + 1);
             seat.addObserver(this);
             seats.add(seat);
         }
@@ -115,7 +115,8 @@ public class SeatView extends VerticalLayout implements ISeatStatusObserver
 
         openButton.addClickListener(buttonClickEvent -> {
             openButton.getUI().ifPresent(ui -> ui.navigate(
-                    OrderBuilderForm.class));
+                    OrderBuilderForm.class,
+                    new RouteParameters("seat", String.valueOf(seat.getSeatNumber()))));
 
             seat.setSeatTaken(!seat.isSeatTaken());
         });

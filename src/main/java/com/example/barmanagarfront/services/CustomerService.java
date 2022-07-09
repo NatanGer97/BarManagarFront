@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 @Service
 public class CustomerService
@@ -26,11 +27,11 @@ public class CustomerService
         this.restTemplate = restTemplateBuilder.build();
     }
 
-    public ArrayList<CustomerAsDto> getCustomers()
+    public ArrayList<CustomerAsDto> getCustomers() throws NullPointerException
     {
         String url = "http://localhost:8080/customers/info";
         ResponseEntity<CustomerResponseObject> forEntity = restTemplate.getForEntity(url, CustomerResponseObject.class);
-        return forEntity.getBody().get_embedded().getCustomerDtoList();
+        return Objects.requireNonNull(forEntity.getBody()).get_embedded().getCustomerDtoList();
 
     }
 

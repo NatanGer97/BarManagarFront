@@ -15,6 +15,7 @@ public class Order
 //    private eOrderStatus orderStatus;
     private LocalDate orderDate;
     private Customer customer;
+    private int seatNumber;
 
     public Order()
     {

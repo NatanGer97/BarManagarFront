@@ -24,6 +24,8 @@ import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.NumberField;
+import com.vaadin.flow.router.BeforeEnterEvent;
+import com.vaadin.flow.router.BeforeEnterObserver;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 
@@ -32,9 +34,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-@Route(value = "BuildOrder", layout = MainLayout.class)
+@Route(value = "BuildOrder/:seat", layout = MainLayout.class)
 @PageTitle("Bar | Order Screen")
-public class OrderBuilderForm extends VerticalLayout
+public class OrderBuilderForm extends VerticalLayout implements BeforeEnterObserver
 {
     private final InventoryService inventoryService;
     private final CustomerService customerService;
@@ -48,6 +50,7 @@ public class OrderBuilderForm extends VerticalLayout
 
     private NumberField totalNumberField;
     private Order order;
+    private int seatNumber;
 
 
 
@@ -56,9 +59,16 @@ public class OrderBuilderForm extends VerticalLayout
         this.inventoryService = inventoryService;
         this.customerService = service;
         this.orderService = orderService;
-        customers = this.customerService.getCustomers();
+        try
+        {
+            customers = this.customerService.getCustomers();
+        }
+        catch (NullPointerException exception)
+        {
+            customers = new ArrayList<>();
+        }
         orderedDrinksWithAmount = new HashMap<>();
-        order = new Order();
+        initOrder();
 
         initTotalNumberField();
 
@@ -69,6 +79,13 @@ public class OrderBuilderForm extends VerticalLayout
 
         add(titleLayout,setUpSelectContainer() ,getContent());
 
+    }
+
+    private void initOrder()
+    {
+        order = new Order();
+        order.setSeatNumber(seatNumber);
+        System.out.println("Seat: " + seatNumber);
     }
 
     private void initTotalNumberField()
@@ -312,6 +329,14 @@ public class OrderBuilderForm extends VerticalLayout
     }
 
 
-
-
+    @Override
+    public void beforeEnter(BeforeEnterEvent beforeEnterEvent)
+    {
+        if  (beforeEnterEvent.getRouteParameters().get("seat").isPresent())
+        {
+            seatNumber = Integer.parseInt(beforeEnterEvent.getRouteParameters().get("seat").get());
+            order.setSeatNumber(seatNumber);
+            System.out.println(order);
+        }
+    }
 }
