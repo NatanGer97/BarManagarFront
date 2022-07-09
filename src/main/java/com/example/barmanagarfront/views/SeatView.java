@@ -113,8 +113,8 @@ public class SeatView extends VerticalLayout implements ISeatStatusObserver
         removeButton.setEnabled(seat.isSeatTaken());
 
         openButton.addClickListener(buttonClickEvent -> {
-       /*     openButton.getUI().ifPresent(ui -> ui.navigate(
-                    OrderBuilderForm.class));*/
+            openButton.getUI().ifPresent(ui -> ui.navigate(
+                    OrderBuilderForm.class));
 
             seat.setSeatTaken(!seat.isSeatTaken());
         });

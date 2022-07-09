@@ -56,8 +56,6 @@ public class MainLayout extends AppLayout implements IInventoryObserver
         tabs.add(createTab(VaadinIcon.GLASS, "Bar Inventory", InventoryView.class ));
         tabs.add(createTab(VaadinIcon.DENTAL_CHAIR, "Bar Seats", SeatView.class ));
 
-
-
         tabs.setOrientation(Tabs.Orientation.VERTICAL);
         return tabs;
     }
