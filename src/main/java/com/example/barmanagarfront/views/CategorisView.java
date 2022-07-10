@@ -1,6 +1,7 @@
 package com.example.barmanagarfront.views;
 
 import com.example.barmanagarfront.MainLayout;
+import com.example.barmanagarfront.enums.eFilterType;
 import com.example.barmanagarfront.services.SupplierService;
 import com.vaadin.flow.component.HasComponents;
 import com.vaadin.flow.component.HasStyle;
@@ -35,7 +36,7 @@ public class CategorisView extends Main implements HasComponents, HasStyle {
         constructUI();
 
         initCategories(apiDrinkService);
-        categories.forEach(category -> imageContainer.add(new FormViewCard(category)));
+        categories.forEach(category -> imageContainer.add(new FormViewCard(category, eFilterType.Category)));
     }
 
     private void initCategories(SupplierService apiDrinkService)
@@ -76,7 +77,7 @@ public class CategorisView extends Main implements HasComponents, HasStyle {
         imageContainer = new OrderedList();
         imageContainer.addClassNames("gap-m", "grid", "list-none", "m-0", "p-0");
 
-        contentContainer.add(headerTitleContainer,sortBy);
+        //contentContainer.add(headerTitleContainer,sortBy);
         add(contentContainer, imageContainer);
 
     }

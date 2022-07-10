@@ -41,6 +41,20 @@ public class SupplierService
         return forEntity.getBody().getDrinkList().getApiDrinkList();
     }
 
+    public ArrayList<ApiDrink> getDrinksByIngredient(String ingredientName){
+        String url = String.format("http://localhost:8080/supplier/ingredient?ingredient=%s", ingredientName);
+        ResponseEntity<ResponseOfDrinksJson> entity = restTemplate.getForEntity(url , ResponseOfDrinksJson.class);
+
+        return entity.getBody().getDrinkList().getApiDrinkList();
+    }
+
+    public ArrayList<ApiDrink> getDrinksByAlcoholicFilter(String alcoholicFilter){
+        String url = String.format("http://localhost:8080/supplier/alcoholic?alcoholicFilter=%s", alcoholicFilter);
+        ResponseEntity<ResponseOfDrinksJson> entity = restTemplate.getForEntity(url, ResponseOfDrinksJson.class);
+
+        return entity.getBody().getDrinkList().getApiDrinkList();
+    }
+
   public List<String> getDrinksCategories() throws NullPointerException
   {
         String url = "http://localhost:8080/supplier/getCategories";
@@ -48,6 +62,11 @@ public class SupplierService
       return Arrays.asList(Objects.requireNonNull(forEntity.getBody()));
   }
 
+  public List<String> getIngredients() throws NullPointerException{
+        String url = "http://localhost:8080/supplier/getIngredients";
+        ResponseEntity<String[]> response = restTemplate.getForEntity(url, String[].class);
+        return Arrays.asList(Objects.requireNonNull(response.getBody()));
+  }
 
   public void deleteDrinkFromInventory(String id)
   {
