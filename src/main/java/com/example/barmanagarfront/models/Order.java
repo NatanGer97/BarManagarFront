@@ -1,12 +1,14 @@
 package com.example.barmanagarfront.models;
 
 import com.example.barmanagarfront.enums.eOrderStatus;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
 
+@JsonIgnoreProperties(ignoreUnknown = true)
 @Data
 public class Order
 {
