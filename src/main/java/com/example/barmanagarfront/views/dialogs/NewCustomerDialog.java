@@ -105,25 +105,7 @@ public class NewCustomerDialog extends Dialog
         return dialogLayout;
     }
 
-/*
 
-    @Data
-    @NoArgsConstructor
-    public  class Customer extends com.example.barmanagarfront.models.Customer
-    {
-        private String firstName;
-        private String lastName;
-        private int idNumber;
-
-        public Customer(int idNumber,
-                        String firstName,
-                        String lastName)
-        {
-            this.firstName = firstName;
-            this.lastName = lastName;
-            this.idNumber = idNumber;
-        }
-    }*/
 
 
 }

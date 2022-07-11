@@ -88,7 +88,8 @@ public class InventoryManagementView extends Main implements HasComponents, HasS
             }
             case Ingredient -> {
                 List<String> ingredients = supplierService.getIngredients();
-                List<FormViewCard> ingredientCards = ingredients.stream().map(ingredient->new FormViewCard(ingredient, eFilterType.Ingredient)).toList();
+                List<FormViewCard> ingredientCards = ingredients.stream()
+                        .map(ingredient->new FormViewCard(ingredient, eFilterType.Ingredient)).toList();
 
                 ingredientCards.forEach(card-> card.addClickListener(clickEvent -> {
                     ingredientTitle.setText(card.getModifiedName());

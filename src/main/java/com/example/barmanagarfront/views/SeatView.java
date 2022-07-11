@@ -1,12 +1,16 @@
 package com.example.barmanagarfront.views;
 
 import com.example.barmanagarfront.MainLayout;
+import com.example.barmanagarfront.Singeltones.SeatsManager;
 import com.example.barmanagarfront.enums.eSeatStatus;
+import com.example.barmanagarfront.events.ClosCustomerDialogEvent;
+import com.example.barmanagarfront.models.Order;
 import com.example.barmanagarfront.models.OrderResponseObject;
 import com.example.barmanagarfront.models.OrderResponseObject.OrderDto;
 import com.example.barmanagarfront.observers.ISeatStatusObserver;
 import com.example.barmanagarfront.observers.Seat;
 import com.example.barmanagarfront.services.OrderService;
+import com.example.barmanagarfront.views.dialogs.OrderBillDialog;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.Text;
 import com.vaadin.flow.component.button.Button;
@@ -20,6 +24,7 @@ import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
+import com.vaadin.flow.router.RouteParam;
 import com.vaadin.flow.router.RouteParameters;
 
 import java.util.ArrayList;
@@ -33,20 +38,30 @@ import java.util.stream.Stream;
 @PageTitle("Bar | Seats ")
 public class SeatView extends VerticalLayout implements ISeatStatusObserver
 {
+
     private final OrderService orderService;
     private Grid<Seat> seatGrid;
     private List<Seat> seats;
     private List<OrderDto> orderDtos;
-    private Map<Seat,OrderDto> seatOrderDtoMap;
+
 
     public SeatView(OrderService orderService)
     {
+
+        System.out.println("inside seat view");
         this.orderService = orderService;
         seats = new ArrayList<>();
-        seatOrderDtoMap = new HashMap<>();
-        orderDtos = orderService.getOpenOrders();
-        System.out.println(orderDtos);
-        initMapOfSeats();
+        try
+        {
+            orderDtos = orderService.getOpenOrders();
+        }
+        catch (Exception exception)
+        {
+            orderDtos = new ArrayList<>();
+        }
+        System.out.println("open: " + orderDtos);
+
+
         for ( int i = 0; i < 5; i++ )
         {
             Seat seat = new Seat(i + 1);
@@ -89,19 +104,12 @@ public class SeatView extends VerticalLayout implements ISeatStatusObserver
 
         updateSeatGrid();
     }
-    private void initMapOfSeats()
-    {
-        for ( OrderDto orderDto : orderDtos )
-        {
-            seatOrderDtoMap.put(new Seat(orderDto.getSeatNumber()),orderDto);
-        }
-        System.out.println(seatOrderDtoMap);
-    }
+
     private Span createStatusLabel(Seat seat)
     {
         Icon icon;
         Span statusSpan;
-        System.out.println(seat.getSeatNumber());
+//        System.out.println(seat.getSeatNumber());
 
         if (!seat.isSeatTaken()) {
             icon = createIcon(VaadinIcon.UNLOCK, eSeatStatus.Free);
@@ -142,13 +150,31 @@ public class SeatView extends VerticalLayout implements ISeatStatusObserver
             openButton.getUI().ifPresent(ui -> ui.navigate(
                     OrderBuilderForm.class,
                     new RouteParameters("seat", String.valueOf(seat.getSeatNumber()))));
-
-            seat.setSeatTaken(!seat.isSeatTaken());
+                    //            seat.setSeatTaken(!seat.isSeatTaken());
         });
 
         removeButton.addClickListener(buttonClickEvent ->
         {
-            seat.setSeatTaken(!seat.isSeatTaken());
+          /*  Map<String,String> params = new HashMap<>();
+            params.put("seat",String.valueOf(seat.getSeatNumber()));
+            params.put("orderId",String.valueOf(SeatsManager.getInstance().getOrder(seat.getSeatNumber())
+                    .getOrderId()));
+//            seat.setSeatTaken(!seat.isSeatTaken());
+            removeButton.getUI().ifPresent(ui -> ui.navigate(
+                    OrderBuilderForm.class,
+                    new RouteParameters(params)
+            ));*/
+            OrderBillDialog orderBillDialog = new OrderBillDialog(
+                    orderService.getOrder(SeatsManager.getInstance()
+                            .getOrder(seat.getSeatNumber()).getOrderId())
+            );
+
+            orderBillDialog.addListener(ClosCustomerDialogEvent.class,closCustomerDialogEvent ->
+            {
+               orderBillDialog.close();
+               updateSeatGrid();
+            });
+            orderBillDialog.open();
         });
 
 
@@ -160,7 +186,9 @@ public class SeatView extends VerticalLayout implements ISeatStatusObserver
 
     private void updateSeatGrid()
     {
-        this.seatGrid.setItems(this.seats);
+        this.seatGrid.setItems(SeatsManager.getInstance().getSeatMap().values());
+        System.out.println("Seats:" + SeatsManager.getInstance().getSeatMap().values());
+//        this.seatGrid.setItems(this.seats);
     }
 
     private Component getContent()
