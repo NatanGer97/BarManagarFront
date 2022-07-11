@@ -46,7 +46,6 @@ public class OrderBillDialog extends Dialog
         RestTemplateBuilder restTemplateBuilder = new RestTemplateBuilder();
 
         this.order = order;
-        logger.info(String.valueOf(order.getOrderedDrinks().size()));
         this.orderService = new OrderService(restTemplateBuilder);
         this.orderGrid = new Grid<>(BarDrink.class,false);
         initDrinksAmountMap();
