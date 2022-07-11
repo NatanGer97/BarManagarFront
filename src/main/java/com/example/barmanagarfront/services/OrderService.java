@@ -1,6 +1,5 @@
 package com.example.barmanagarfront.services;
 
-import com.example.barmanagarfront.models.Customer;
 import com.example.barmanagarfront.models.Order;
 import com.example.barmanagarfront.models.OrderResponseObject;
 import org.slf4j.Logger;
@@ -58,12 +57,20 @@ public class OrderService
         return forEntity.getBody();
     }
 
-    public void setOrderClose(Order order)
+    public void setOrderClose(String id)
     {
-        String url = String.format("http://localhost:8080/orders/%s",order.getOrderId());
-        restTemplate.put(url,order,Order.class);
+        String url = String.format("http://localhost:8080/orders/%s",id);
+        restTemplate.put(url, OrderResponseObject.OrderDto.class);
+    }
 
-
+    public OrderResponseObject.OrderDto getOrderBySeatNumber(int seatNumber)
+    {
+        String url = String.format
+                ("http://localhost:8080/orders/closeBySeat?seatNumber=%s&orderStatus=Open",seatNumber);
+        ResponseEntity<OrderResponseObject.OrderDto> response =
+                restTemplate.getForEntity(url, OrderResponseObject.OrderDto.class);
+        logger.info(response.getBody().toString());
+        return response.getBody();
     }
 
 }

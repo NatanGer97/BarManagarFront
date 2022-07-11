@@ -155,6 +155,8 @@ public class SeatView extends VerticalLayout implements ISeatStatusObserver
 
         removeButton.addClickListener(buttonClickEvent ->
         {
+            OrderDto orderDto = orderService.getOrderBySeatNumber(seat.getSeatNumber());
+            System.out.println(orderDto.getOrderedItems().size());
           /*  Map<String,String> params = new HashMap<>();
             params.put("seat",String.valueOf(seat.getSeatNumber()));
             params.put("orderId",String.valueOf(SeatsManager.getInstance().getOrder(seat.getSeatNumber())
@@ -164,10 +166,11 @@ public class SeatView extends VerticalLayout implements ISeatStatusObserver
                     OrderBuilderForm.class,
                     new RouteParameters(params)
             ));*/
-            OrderBillDialog orderBillDialog = new OrderBillDialog(
+           /* OrderBillDialog orderBillDialog = new OrderBillDialog(
                     orderService.getOrder(SeatsManager.getInstance()
                             .getOrder(seat.getSeatNumber()).getOrderId())
-            );
+            );*/
+            OrderBillDialog orderBillDialog = new OrderBillDialog(orderDto);
 
             orderBillDialog.addListener(ClosCustomerDialogEvent.class,closCustomerDialogEvent ->
             {

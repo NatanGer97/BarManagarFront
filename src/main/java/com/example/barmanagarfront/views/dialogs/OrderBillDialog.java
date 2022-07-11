@@ -4,6 +4,7 @@ import com.example.barmanagarfront.Singeltones.SeatsManager;
 import com.example.barmanagarfront.events.ClosCustomerDialogEvent;
 import com.example.barmanagarfront.models.BarDrink;
 import com.example.barmanagarfront.models.Order;
+import com.example.barmanagarfront.models.OrderResponseObject;
 import com.example.barmanagarfront.services.OrderService;
 import com.vaadin.flow.component.ComponentEvent;
 import com.vaadin.flow.component.ComponentEventListener;
@@ -25,7 +26,7 @@ import java.util.Map;
 
 public class OrderBillDialog extends Dialog
 {
-    private final Order order;
+    private final OrderResponseObject.OrderDto order;
     private final OrderService orderService;
     private final Logger logger = LoggerFactory.getLogger(OrderBillDialog.class);
     private Map<BarDrink, Integer> orderedDrinksWithAmount;
@@ -41,7 +42,7 @@ public class OrderBillDialog extends Dialog
         return getEventBus().addListener(eventType, listener);
     }
 
-    public OrderBillDialog(Order order)
+    public OrderBillDialog(OrderResponseObject.OrderDto order)
     {
         RestTemplateBuilder restTemplateBuilder = new RestTemplateBuilder();
 
@@ -51,7 +52,7 @@ public class OrderBillDialog extends Dialog
         initDrinksAmountMap();
         initGrid();
         initBillButton();
-        initBillNumberField(order);
+        initBillNumberField();
 
         add(createDialogLayout());
     }
@@ -59,8 +60,8 @@ public class OrderBillDialog extends Dialog
     private void initDrinksAmountMap()
     {
         this.orderedDrinksWithAmount = new HashMap<>();
-        ArrayList<BarDrink> orderedDrinks = order.getOrderedDrinks();
-        logger.info("Ordered Drink size" + orderedDrinks.size());
+        ArrayList<BarDrink> orderedDrinks = order.getOrderedItems();
+//        logger.info("Ordered Drink size" + orderedDrinks.size());
         for ( BarDrink orderedDrink : orderedDrinks )
         {
             addToOrder(orderedDrink);
@@ -88,17 +89,11 @@ public class OrderBillDialog extends Dialog
     {
         orderGrid.setAllRowsVisible(true);
         orderGrid.addColumn(drink -> drink.getName()).setHeader("Item");
-        /*orderGrid.addColumn(drink -> drink.getPrice()).setHeader("price");
-        orderGrid.addColumn(drink -> createAmountColumn(drink)).setHeader("amount");*/
         orderGrid.setSizeFull();
 
         updateGrid();
     }
 
-    private int createAmountColumn(BarDrink drink)
-    {
-        return orderedDrinksWithAmount.get(drink);
-    }
 
 
     private void updateGrid()
@@ -132,16 +127,17 @@ public class OrderBillDialog extends Dialog
     private void closeOrder()
     {
         System.out.println(order);
-        orderService.setOrderClose(order);
+
+        orderService.setOrderClose(order.getOrderId());
         SeatsManager.getInstance().updateSet(order.getSeatNumber());
 //        this.close();
         fireEvent(new ClosCustomerDialogEvent(this,false));
     }
 
-    private void initBillNumberField(Order order)
+    private void initBillNumberField()
     {
         billNumberField = new NumberField();
-        billNumberField.setValue(order.getBill());
+        billNumberField.setValue(order.getOrderBill());
 
     }
 }
