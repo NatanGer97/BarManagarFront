@@ -1,24 +1,16 @@
 package com.example.barmanagarfront.views;
 
-import com.example.barmanagarfront.services.SupplierService;
-import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.html.*;
-import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
-import com.vaadin.flow.router.QueryParameters;
-import com.vaadin.flow.router.RouteParameters;
-import com.vaadin.flow.router.RouterLink;
 import com.example.barmanagarfront.enums.eFilterType;
-
-import java.util.Map;
 
 public class FormViewCard extends ListItem{
 
-    private final String originalCategoryName;
-    private String modifiedCategoryName;
+    private final String originalName;
+    private String modifiedName;
 
     public FormViewCard(String name, eFilterType type) {
-        originalCategoryName = name;
-        modifyCategoryName();
+        originalName = name;
+        modifyName();
         addClassNames("bg-contrast-5", "flex", "flex-col", "items-start", "p-m", "rounded-l");
 
 //        Div div = new Div();
@@ -64,24 +56,24 @@ public class FormViewCard extends ListItem{
     }
 
 
-    private void modifyCategoryName()
+    private void modifyName()
     {
-        if ( this.originalCategoryName.contains(" / ") )
+        if ( this.originalName.contains(" / ") )
         {
-            modifiedCategoryName = originalCategoryName.replace(" / ","%");
+            modifiedName = originalName.replace(" / ","%");
 //            modifiedCategoryName = originalCategoryName.replaceFirst("/\\s\\W+\\s/gm","sb");
         }
-        else if ( this.originalCategoryName.contains("/") )
+        else if ( this.originalName.contains("/") )
         {
-            modifiedCategoryName = originalCategoryName.replace("/","$");
+            modifiedName = originalName.replace("/","$");
         }
         else
         {
-            modifiedCategoryName = originalCategoryName;
+            modifiedName = originalName;
         }
     }
 
-    public String getModifiedCategoryName() {
-        return modifiedCategoryName;
+    public String getModifiedName() {
+        return modifiedName;
     }
 }
