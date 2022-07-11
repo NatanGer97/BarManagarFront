@@ -2,10 +2,13 @@ package com.example.barmanagarfront.events;
 
 import com.example.barmanagarfront.views.dialogs.NewCustomerDialog;
 import com.vaadin.flow.component.ComponentEvent;
+import com.vaadin.flow.component.dialog.Dialog;
 
-public class CustomerDialogEvent extends ComponentEvent<NewCustomerDialog>
+import java.awt.*;
+
+public class CustomerDialogEvent extends ComponentEvent<com.vaadin.flow.component.dialog.Dialog>
 {
-    public CustomerDialogEvent(NewCustomerDialog source, boolean fromClient)
+    public CustomerDialogEvent(Dialog source, boolean fromClient)
     {
         super(source, false);
     }

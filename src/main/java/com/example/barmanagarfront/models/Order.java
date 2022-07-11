@@ -18,6 +18,7 @@ public class Order
     private LocalDate orderDate;
     private Customer customer;
     private int seatNumber;
+    private String orderId;
 
     public Order()
     {

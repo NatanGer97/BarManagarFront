@@ -11,7 +11,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Service
 public class OrderService
@@ -41,7 +43,27 @@ public class OrderService
         String url = "http://localhost:8080/orders/openOrders";
         ResponseEntity<OrderResponseObject> forEntity =
                 restTemplate.getForEntity(url, OrderResponseObject.class);
-        return forEntity.getBody().get_embedded().getOrderDtoList();
+        logger.info("Open orders:" + forEntity);
+        ArrayList<OrderResponseObject.OrderDto> orderDtoList =
+                Objects.requireNonNull(forEntity.getBody()).get_embedded().getOrderDtoList();
+
+        return orderDtoList;
+    }
+
+    public Order getOrder(String orderId)
+    {
+        String url = String.format("http://localhost:8080/orders/%s",orderId);
+        ResponseEntity<Order> forEntity = restTemplate.getForEntity(url, Order.class);
+        System.out.println(forEntity.getBody());
+        return forEntity.getBody();
+    }
+
+    public void setOrderClose(Order order)
+    {
+        String url = String.format("http://localhost:8080/orders/%s",order.getOrderId());
+        restTemplate.put(url,order,Order.class);
+
+
     }
 
 }
