@@ -1,7 +1,6 @@
 package com.example.barmanagarfront.views;
 
 import com.example.barmanagarfront.MainLayout;
-import com.example.barmanagarfront.Singeltones.SeatsManager;
 import com.example.barmanagarfront.events.ClosCustomerDialogEvent;
 import com.example.barmanagarfront.models.BarDrink;
 import com.example.barmanagarfront.models.Customer;
@@ -21,6 +20,8 @@ import com.vaadin.flow.component.grid.ColumnTextAlign;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.icon.VaadinIcon;
+import com.vaadin.flow.component.notification.Notification;
+import com.vaadin.flow.component.notification.NotificationVariant;
 import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
@@ -29,6 +30,8 @@ import com.vaadin.flow.router.BeforeEnterEvent;
 import com.vaadin.flow.router.BeforeEnterObserver;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
@@ -54,9 +57,6 @@ public class OrderBuilderForm extends VerticalLayout implements BeforeEnterObser
     private int seatNumber;
     private Button placeOrderButton;
 
-
-
-
     public OrderBuilderForm(InventoryService inventoryService, CustomerService service, OrderService orderService)
     {
         this.inventoryService = inventoryService;
@@ -70,6 +70,7 @@ public class OrderBuilderForm extends VerticalLayout implements BeforeEnterObser
         {
             customers = new ArrayList<>();
         }
+
         orderedDrinksWithAmount = new HashMap<>();
         initOrder();
 
@@ -91,8 +92,6 @@ public class OrderBuilderForm extends VerticalLayout implements BeforeEnterObser
             order = new Order();
             order.setSeatNumber(seatNumber);
         }
-
-
     }
 
     private void initTotalNumberField()
@@ -115,7 +114,7 @@ public class OrderBuilderForm extends VerticalLayout implements BeforeEnterObser
         orderedDrinkGrid.addColumn(drink -> createAmountColumn(drink)).setHeader("amount");
         orderedDrinkGrid.addColumn(BarDrink::getPrice).setHeader("price");
         orderedDrinkGrid.addColumn(drink -> drink.getPrice() * createAmountColumn(drink)).setHeader("total");
-        orderedDrinkGrid.addComponentColumn(drink -> createButtonsOrderGrid(drink));
+        /*orderedDrinkGrid.addComponentColumn(drink -> createButtonsOrderGrid(drink));*/
     }
 
     private double calcTotalSum()
@@ -137,7 +136,7 @@ public class OrderBuilderForm extends VerticalLayout implements BeforeEnterObser
         return orderedDrinksWithAmount.get(drink);
     }
 
-    private Component createButtonsOrderGrid(BarDrink drink)
+ /*   private Component createButtonsOrderGrid(BarDrink drink)
     {
         Button removeDrinkButton = new Button(VaadinIcon.TRASH.create());
         removeDrinkButton.addThemeVariants(ButtonVariant.LUMO_ICON,
@@ -147,16 +146,12 @@ public class OrderBuilderForm extends VerticalLayout implements BeforeEnterObser
         HorizontalLayout horizontalLayout = new HorizontalLayout(removeDrinkButton);
         return horizontalLayout;
     }
+*/
 
-    private void removeFromOrder()
-    {
-
-    }
 
     private void initDrinksGrid()
     {
         drinksGrid = new Grid<>(BarDrink.class,false);
-//        drinksGrid.setSizeFull();
         drinksGrid.setEnabled(false);
         drinksGrid.setHeight("500px");
         drinksGrid.setAllRowsVisible(true);
@@ -252,6 +247,7 @@ public class OrderBuilderForm extends VerticalLayout implements BeforeEnterObser
         orderedDrinkGrid.setItems(orderedDrinksWithAmount.keySet());
         totalNumberField.setValue(calcTotalSum());
         order.setBill(totalNumberField.getValue());
+
     }
 
 
@@ -268,13 +264,12 @@ public class OrderBuilderForm extends VerticalLayout implements BeforeEnterObser
         customerComboBox.setItemLabelGenerator(CustomerAsDto::showCustomer);
         customerComboBox.setPlaceholder("Select Customer");
 
-
-
         placeOrderButton = new Button("place order");
         placeOrderButton.addThemeVariants(ButtonVariant.LUMO_SUCCESS);
         placeOrderButton.addClickListener(buttonClickEvent -> placeOrder());
         customerComboBox.addValueChangeListener(event ->{
             drinksGrid.setEnabled(!(event.getValue() == null));
+
             if ( event.getValue() != null )
             {
                 CustomerAsDto customerAsDto = event.getValue();
@@ -299,12 +294,36 @@ public class OrderBuilderForm extends VerticalLayout implements BeforeEnterObser
 
     private void placeOrder()
     {
-//        SeatsManager.getInstance().initOrder(order);
-        orderService.saveOrder(order);
-        System.out.println("Order" + order.getOrderedDrinks().size());
-        this.getUI().ifPresent(ui -> ui.navigate(SeatView.class));
 
 
+        if ( !order.getOrderedDrinks().isEmpty() )
+        {
+            ResponseEntity<Order> orderResponseEntity = orderService.saveOrder(order);
+
+            if ( orderResponseEntity.getStatusCode() == HttpStatus.CREATED )
+            {
+                showNotification("Order sent",false);
+            }
+
+            this.getUI().ifPresent(ui -> ui.navigate(SeatView.class));
+        }
+        else
+        {
+            showNotification("Cant send empty order",true);
+        }
+    }
+
+    private void showNotification(String msg, boolean isErrorOrNot)
+    {
+        Notification notification;
+        notification = Notification.show(msg);
+        notification.setDuration(2000);
+
+        if ( !isErrorOrNot ) notification.addThemeVariants(NotificationVariant.LUMO_SUCCESS);
+        else notification.addThemeVariants(NotificationVariant.LUMO_ERROR);
+
+        notification.setPosition(Notification.Position.TOP_CENTER);
+        notification.open();
     }
 
     private void createCustomer()
@@ -349,17 +368,7 @@ public class OrderBuilderForm extends VerticalLayout implements BeforeEnterObser
         {
             seatNumber = Integer.parseInt(beforeEnterEvent.getRouteParameters().get("seat").get());
             order.setSeatNumber(seatNumber);
-//            System.out.println(order);
         }
 
-//        if ( beforeEnterEvent.getRouteParameters().get("orderId").isPresent() )
-//        {
-//            Order order = orderService.getOrder(beforeEnterEvent.getRouteParameters().get("orderId").get());
-//            this.order = order;
-//            System.out.println("Order res " + order);
-//            System.out.println("Order after: " + this.order);
-//            System.out.println(order.equals(this.order));
-//
-//        }
     }
 }

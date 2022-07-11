@@ -13,9 +13,9 @@ import java.util.Map;
 @Data
 public final class SeatsManager {
     private static volatile SeatsManager seatsManagerInstance;
-    private static Map<Integer, OrderResponseObject.OrderDto> ordersMap;
-    private static Map<Integer,Seat> seatMap;
-    private static OrderService orderService;
+    private  Map<Integer, OrderResponseObject.OrderDto> ordersMap;
+    private  Map<Integer,Seat> seatMap;
+    private  OrderService orderService;
 
 
     private SeatsManager()
@@ -40,7 +40,7 @@ public final class SeatsManager {
 
     }
 
-    private static void getOpenOrder()
+    private  void getOpenOrder()
     {
         try
         {
@@ -62,7 +62,7 @@ public final class SeatsManager {
     {
         SeatsManager seatsManager = seatsManagerInstance;
         if ( seatsManagerInstance != null ){
-            getOpenOrder();
+//            getOpenOrder();
 
             return seatsManager;
         }
@@ -77,27 +77,12 @@ public final class SeatsManager {
         }
     }
 
-   /* public void initOrder(Order order)
-    {
-        int seatNumber = order.getSeatNumber();
-        this.ordersMap.put(seatNumber,order);
-        this.seatMap.put(seatNumber,new Seat(seatNumber));
-        Seat seat = this.seatMap.get(seatNumber);
-        seat.setSeatTaken(true);
-        this.seatMap.put(order.getSeatNumber(),seat);
-    }*/
-
-    public Map<Integer, OrderResponseObject.OrderDto> getOrdersMap()
-    {
-        return ordersMap;
-    }
-
     public Map<Integer, Seat> getSeatMap()
     {
         getOpenOrder();
         return seatMap;
     }
-    public  void updateSet(int setNumber)
+    public void updateSet(int setNumber)
     {
         Seat seat = seatMap.get(setNumber);
         seat.setSeatTaken(!seat.isSeatTaken());

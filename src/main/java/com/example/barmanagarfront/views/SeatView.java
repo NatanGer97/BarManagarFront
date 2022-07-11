@@ -90,7 +90,6 @@ public class SeatView extends VerticalLayout implements ISeatStatusObserver
     private void initSeatGrid()
     {
         this.seatGrid = new Grid<>(Seat.class,false);
-//        seatGrid.setSizeFull();
         seatGrid.setAllRowsVisible(true);
         seatGrid.addColumn(seat -> seat.getSeatNumber()).setHeader("Seat")
                 .setTextAlign(ColumnTextAlign.CENTER);
@@ -156,20 +155,7 @@ public class SeatView extends VerticalLayout implements ISeatStatusObserver
         removeButton.addClickListener(buttonClickEvent ->
         {
             OrderDto orderDto = orderService.getOrderBySeatNumber(seat.getSeatNumber());
-            System.out.println(orderDto.getOrderedItems().size());
-          /*  Map<String,String> params = new HashMap<>();
-            params.put("seat",String.valueOf(seat.getSeatNumber()));
-            params.put("orderId",String.valueOf(SeatsManager.getInstance().getOrder(seat.getSeatNumber())
-                    .getOrderId()));
-//            seat.setSeatTaken(!seat.isSeatTaken());
-            removeButton.getUI().ifPresent(ui -> ui.navigate(
-                    OrderBuilderForm.class,
-                    new RouteParameters(params)
-            ));*/
-           /* OrderBillDialog orderBillDialog = new OrderBillDialog(
-                    orderService.getOrder(SeatsManager.getInstance()
-                            .getOrder(seat.getSeatNumber()).getOrderId())
-            );*/
+
             OrderBillDialog orderBillDialog = new OrderBillDialog(orderDto);
 
             orderBillDialog.addListener(ClosCustomerDialogEvent.class,closCustomerDialogEvent ->

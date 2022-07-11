@@ -61,7 +61,6 @@ public class OrderBillDialog extends Dialog
     {
         this.orderedDrinksWithAmount = new HashMap<>();
         ArrayList<BarDrink> orderedDrinks = order.getOrderedItems();
-//        logger.info("Ordered Drink size" + orderedDrinks.size());
         for ( BarDrink orderedDrink : orderedDrinks )
         {
             addToOrder(orderedDrink);
@@ -83,8 +82,6 @@ public class OrderBillDialog extends Dialog
         updateGrid();
     }
 
-
-
     private void initGrid()
     {
         orderGrid.setAllRowsVisible(true);
@@ -99,13 +96,10 @@ public class OrderBillDialog extends Dialog
     private void updateGrid()
     {
         this.orderGrid.setItems(this.orderedDrinksWithAmount.keySet());
-//        this.orderGrid.setItems(order.getOrderedDrinks());
     }
 
     private VerticalLayout createDialogLayout()
     {
-
-
         VerticalLayout dialogLayout = new VerticalLayout(billNumberField,orderGrid,calcButton);
         dialogLayout.setPadding(false);
         dialogLayout.setSpacing(false);
@@ -119,18 +113,14 @@ public class OrderBillDialog extends Dialog
     private void initBillButton()
     {
         calcButton = new Button("Pay");
-//        calcButton.addClickListener(event -> fireEvent(new ClosCustomerDialogEvent(this,false)));
         calcButton.addClickListener(buttonClickEvent ->  closeOrder());
 
     }
 
     private void closeOrder()
     {
-        System.out.println(order);
-
         orderService.setOrderClose(order.getOrderId());
         SeatsManager.getInstance().updateSet(order.getSeatNumber());
-//        this.close();
         fireEvent(new ClosCustomerDialogEvent(this,false));
     }
 
