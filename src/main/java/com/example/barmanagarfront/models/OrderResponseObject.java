@@ -30,6 +30,7 @@ public class OrderResponseObject
         public String orderStatus;
         public String orderName;
         public ArrayList<BarDrink> orderedItems;
+        public String orderDate;
 
     }
 

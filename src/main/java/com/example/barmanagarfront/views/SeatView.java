@@ -54,6 +54,7 @@ public class SeatView extends VerticalLayout implements ISeatStatusObserver
         try
         {
             orderDtos = orderService.getOpenOrders();
+
         }
         catch (Exception exception)
         {
@@ -108,7 +109,6 @@ public class SeatView extends VerticalLayout implements ISeatStatusObserver
     {
         Icon icon;
         Span statusSpan;
-//        System.out.println(seat.getSeatNumber());
 
         if (!seat.isSeatTaken()) {
             icon = createIcon(VaadinIcon.UNLOCK, eSeatStatus.Free);

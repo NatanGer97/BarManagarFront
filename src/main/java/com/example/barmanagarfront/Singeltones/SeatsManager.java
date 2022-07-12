@@ -40,7 +40,7 @@ public final class SeatsManager {
 
     }
 
-    private  void getOpenOrder()
+    private void getOpenOrder()
     {
         try
         {
@@ -62,8 +62,7 @@ public final class SeatsManager {
     {
         SeatsManager seatsManager = seatsManagerInstance;
         if ( seatsManagerInstance != null ){
-//            getOpenOrder();
-
+            seatsManager.initMaps();
             return seatsManager;
         }
 

@@ -56,6 +56,7 @@ public class MainLayout extends AppLayout implements IInventoryObserver
         tabs.add(createTab(VaadinIcon.GLASS, "Bar Inventory", InventoryView.class ));
         tabs.add(createTab(VaadinIcon.WRENCH,"Manage Inventory", InventoryManagementView.class));
         tabs.add(createTab(VaadinIcon.CART_O, "Added", CartView.class ));
+        tabs.add(createTab(VaadinIcon.SEARCH, "OrderHistory", OrdersView.class ));
 
         tabs.setOrientation(Tabs.Orientation.VERTICAL);
         return tabs;

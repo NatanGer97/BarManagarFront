@@ -42,7 +42,7 @@ public class OrderService
         String url = "http://localhost:8080/orders/openOrders";
         ResponseEntity<OrderResponseObject> forEntity =
                 restTemplate.getForEntity(url, OrderResponseObject.class);
-        logger.info("Open orders:" + forEntity);
+        logger.info("Open orders:" + Objects.requireNonNull(forEntity.getBody()).get_embedded().getOrderDtoList().size());
         ArrayList<OrderResponseObject.OrderDto> orderDtoList =
                 Objects.requireNonNull(forEntity.getBody()).get_embedded().getOrderDtoList();
 
@@ -57,6 +57,7 @@ public class OrderService
         return forEntity.getBody();
     }
 
+
     public void setOrderClose(String id)
     {
         String url = String.format("http://localhost:8080/orders/%s",id);
@@ -70,8 +71,28 @@ public class OrderService
                 ("http://localhost:8080/orders/closeBySeat?seatNumber=%s&orderStatus=Open",seatNumber);
         ResponseEntity<OrderResponseObject.OrderDto> response =
                 restTemplate.getForEntity(url, OrderResponseObject.OrderDto.class);
-        logger.info(response.getBody().toString());
+        if ( !response.hasBody() )
+        {
+            return new OrderResponseObject.OrderDto();
+        }
         return response.getBody();
     }
+    public ArrayList<OrderResponseObject.OrderDto> getDtoOrders()
+    {
+        String url = "http://localhost:8080/orders/info";
+        ResponseEntity<OrderResponseObject> response = restTemplate.
+                getForEntity(url, OrderResponseObject.class);
+        ArrayList<OrderResponseObject.OrderDto> orderDtoList;
+        try
+        {
+           orderDtoList = Objects.requireNonNull(response.getBody()).get_embedded().getOrderDtoList();
 
+        }
+        catch (NullPointerException exception){
+            orderDtoList = new ArrayList<>();
+        }
+
+        return orderDtoList;
+
+    }
 }

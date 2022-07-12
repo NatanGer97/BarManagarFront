@@ -57,7 +57,9 @@ public class OrderBuilderForm extends VerticalLayout implements BeforeEnterObser
     private int seatNumber;
     private Button placeOrderButton;
 
-    public OrderBuilderForm(InventoryService inventoryService, CustomerService service, OrderService orderService)
+    public OrderBuilderForm(InventoryService inventoryService,
+                            CustomerService service,
+                            OrderService orderService)
     {
         this.inventoryService = inventoryService;
         this.customerService = service;
@@ -294,8 +296,6 @@ public class OrderBuilderForm extends VerticalLayout implements BeforeEnterObser
 
     private void placeOrder()
     {
-
-
         if ( !order.getOrderedDrinks().isEmpty() )
         {
             ResponseEntity<Order> orderResponseEntity = orderService.saveOrder(order);
