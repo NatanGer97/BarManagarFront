@@ -1,5 +1,6 @@
 package com.example.barmanagarfront.services;
 
+import com.example.barmanagarfront.models.QueryResult;
 import com.example.barmanagarfront.models.Order;
 import com.example.barmanagarfront.models.OrderResponseObject;
 import org.slf4j.Logger;
@@ -11,6 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
@@ -63,6 +65,20 @@ public class OrderService
         String url = String.format("http://localhost:8080/orders/%s",id);
         restTemplate.put(url, OrderResponseObject.OrderDto.class);
 
+    }
+
+    public List<QueryResult> getProfitsByYear(int year){
+        String url = String.format("http://localhost:8080/orders/profits?year=%s", year);
+        ResponseEntity<QueryResult[]> response = restTemplate.getForEntity(url, QueryResult[].class);
+
+        return Arrays.stream(Objects.requireNonNull(response.getBody())).toList();
+    }
+
+    public List<QueryResult> getMostPopularDrinks(){
+        String url = "http://localhost:8080/orders/drinkPopularity";
+        ResponseEntity<QueryResult[]> response = restTemplate.getForEntity(url, QueryResult[].class);
+
+        return Arrays.stream(Objects.requireNonNull(response.getBody())).toList();
     }
 
     public OrderResponseObject.OrderDto getOrderBySeatNumber(int seatNumber)
