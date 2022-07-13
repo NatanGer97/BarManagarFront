@@ -1,5 +1,6 @@
-package com.example.barmanagarfront;
+package com.example.barmanagarfront.views;
 
+import com.example.barmanagarfront.MainLayout;
 import com.example.barmanagarfront.models.OrderResponseObject;
 import com.example.barmanagarfront.services.OrderService;
 import com.vaadin.flow.component.grid.ColumnTextAlign;
@@ -40,7 +41,7 @@ public class OrdersView extends VerticalLayout
         orderDtoGrid.addComponentColumn(orderDto -> createStatusLabel(orderDto.getOrderStatus()))
                 .setHeader("Status");
         orderDtoGrid.addColumn(orderDto -> orderDto.getOrderDate()).setHeader("Date");
-        orderDtoGrid.addColumn(orderDto -> orderDto.getOrderBill()).setHeader("Bill");
+        orderDtoGrid.addColumn(orderDto -> orderDto.getOrderBill()).setHeader("Bill").setSortable(true);
 
 
 

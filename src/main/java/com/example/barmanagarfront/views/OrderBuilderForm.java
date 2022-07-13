@@ -38,7 +38,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-@Route(value = "BuildOrder/:seat/:orderId?", layout = MainLayout.class)
+@Route(value = "BuildOrder/:seat/", layout = MainLayout.class)
 @PageTitle("Bar | Order Screen")
 public class OrderBuilderForm extends VerticalLayout implements BeforeEnterObserver
 {
@@ -275,7 +275,7 @@ public class OrderBuilderForm extends VerticalLayout implements BeforeEnterObser
             if ( event.getValue() != null )
             {
                 CustomerAsDto customerAsDto = event.getValue();
-                String[] fullNameSplit = customerAsDto.getFullName().split(" ");
+                String[] fullNameSplit = customerAsDto.getName().split(" ");
                 Customer customer = new Customer(customerAsDto.getIdNumber(),
                         fullNameSplit[0],fullNameSplit[1]);
                 order.setCustomer(customer);
