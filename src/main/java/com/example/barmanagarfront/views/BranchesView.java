@@ -55,9 +55,13 @@ public class BranchesView extends VerticalLayout
         headerTitle.addClassNames("mb-0", "mt-xl", "text-3xl");
         headerContainer.add(headerTitle);
 
-        title = new H1(new Text("Brunches"));
+        title = new H1(new Text("Branches"));
+        VerticalLayout newBranchLayout = new VerticalLayout();
+        Button newBranchButton = new Button("Add Branch");
+        newBranchLayout.setAlignItems(Alignment.CENTER);
+        newBranchLayout.add(newBranchButton);
 
-        headerTitle.add(title);
+        headerTitle.add(title,newBranchLayout);
         return headerContainer;
     }
 
@@ -65,9 +69,7 @@ public class BranchesView extends VerticalLayout
     {
         brunchDtoGrid.setAllRowsVisible(true);
         brunchDtoGrid.addColumn(brunchDto -> brunchDto.getBrunchName()).setHeader("Brunch");
-        brunchDtoGrid.addColumn(brunchDto -> brunchDto.getOrderIds().size()).setHeader("Orders");
         brunchDtoGrid.addColumn(brunchDto -> brunchDto.getEmployeesIds().size()).setHeader("Employees");
-        brunchDtoGrid.addColumn(brunchDto -> brunchDto.getTotalOrdersBill()).setHeader("profit");
         brunchDtoGrid.addComponentColumn(brunchDto -> createButtons(brunchDto));
 
         updateGrid();
@@ -81,10 +83,11 @@ public class BranchesView extends VerticalLayout
     private Component createButtons(BrunchDto brunchDto)
     {
         Button toBrunchButton = new Button("Enter", VaadinIcon.POINTER.create());
+
         toBrunchButton.addClickListener(buttonClickEvent -> {
+            System.out.println(brunchDto.getBrunchId());
             toBrunchButton.getUI().ifPresent(ui -> ui.navigate(SingleBrunchView.class,
-                    new RouteParameters("branchName",brunchDto.getBrunchName())));
-            //            seat.setSeatTaken(!seat.isSeatTaken());
+                    new RouteParameters("branchId",brunchDto.getBrunchId())));
         });
 
 

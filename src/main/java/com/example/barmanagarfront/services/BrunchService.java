@@ -30,6 +30,15 @@ public class BrunchService
         ArrayList<BrunchDto> brunchDtoList = response.getBody().get_embedded().getBrunchDtoList();
 
         return brunchDtoList;
+    }
+
+    public BrunchDto getBranch(String brunchId)
+    {
+        String url = String.format("http://localhost:8080/brunches/%s/info",brunchId);
+        logger.info(url);
+        ResponseEntity<BrunchDto> response = restTemplate.getForEntity(url, BrunchDto.class);
+
+        return response.getBody();
 
     }
 

@@ -36,15 +36,13 @@ public class MainLayout extends AppLayout implements IInventoryObserver
                 .set("font-size", "var(--lumo-font-size-l)")
                 .set("margin", "0");
         Tabs tabs = getTabs();
-        Button button = new Button("Get");
-        button.addClickListener(buttonClickEvent ->
-        {
-            apiDrinkService.getDrinksCategories();
-        });
-
+        Button enterButton = new Button("Enter");
         addToDrawer(tabs);
         addToNavbar(drawerToggle, title);
         CartOfDrinksManager.getInstance().addObserver(this);
+
+
+
 
     }
 

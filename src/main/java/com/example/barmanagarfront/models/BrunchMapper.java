@@ -30,7 +30,7 @@ public class BrunchMapper
         public double totalOrdersBill;
         public int numOfEmployees;
         public ArrayList<String> employeesIds;
-        public ArrayList<String> orderIds;
+//        public ArrayList<String> orderIds;
     }
 
 

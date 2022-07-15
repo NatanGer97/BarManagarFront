@@ -23,7 +23,6 @@ public class Order
     public Order()
     {
         this.orderedDrinks = new ArrayList<>();
-//        this.orderStatus = eOrderStatus.Open;
         this.orderDate = LocalDate.now();
     }
 

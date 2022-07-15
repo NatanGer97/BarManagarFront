@@ -46,7 +46,7 @@ public class NewCustomerDialog extends Dialog
     public NewCustomerDialog(CustomerService customerService)
     {
         this.customerService = customerService;
-        this.setHeaderTitle("New Category");
+        this.setHeaderTitle("New Customer");
         VerticalLayout dialogLayout = createDialogLayout();
 
         customerBinder = new BeanValidationBinder<>(Customer.class);
