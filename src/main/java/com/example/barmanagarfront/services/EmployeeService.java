@@ -36,7 +36,7 @@ public class EmployeeService
         return employeeDtos;
     }
 
-    public ArrayList<EmployeeDto> getAllEmployees(String branchId)
+    public ArrayList<EmployeeDto> getAllEmployeesByBranch(String branchId)
     {
         ArrayList<EmployeeDto> employeeDtos;
         String url = String.format("http://localhost:8080/employees/filterByBranch?brunchId=%s",branchId);
@@ -62,6 +62,31 @@ public class EmployeeService
         HttpStatus statusCode = response.getStatusCode();
 
         return response;
+    }
+
+    public ArrayList<EmployeeDto> getAllEmployees()
+    {
+        ArrayList<EmployeeDto> employeeDtoList;
+        String url = "http://localhost:8080/employees/info";
+        ResponseEntity<EmployeeMapper> response = restTemplate.getForEntity(url, EmployeeMapper.class);
+
+        try
+        {
+            employeeDtoList= Objects.requireNonNull(response.getBody()).get_embedded().employeeDtoList;
+        }
+        catch (NullPointerException exception)
+        {
+            employeeDtoList = new ArrayList<>();
+        }
+        return employeeDtoList;
+    }
+
+    public void updateEmployee(Employee employee,String employeeId){
+        String url = String.format(
+                "http://localhost:8080/employees/%s"
+                ,employeeId);
+
+        restTemplate.put(url,employee, Employee.class);
     }
 
 }

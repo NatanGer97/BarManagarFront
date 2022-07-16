@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 @Service
 public class BrunchService
@@ -28,9 +29,18 @@ public class BrunchService
 
     public ArrayList<BrunchDto> getBrunchesDtos()
     {
+        ArrayList<BrunchDto> brunchDtoList;
+
         String url = "http://localhost:8080/brunches/info";
         ResponseEntity<BrunchMapper> response = restTemplate.getForEntity(url, BrunchMapper.class);
-        ArrayList<BrunchDto> brunchDtoList = response.getBody().get_embedded().getBrunchDtoList();
+        try
+        {
+            brunchDtoList = Objects.requireNonNull(response.getBody()).get_embedded().getBrunchDtoList();
+        }
+        catch (NullPointerException exception)
+        {
+            brunchDtoList = new ArrayList<>();
+        }
 
         return brunchDtoList;
     }

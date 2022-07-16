@@ -3,6 +3,8 @@ package com.example.barmanagarfront.views.dialogs;
 import com.example.barmanagarfront.events.ClosCustomerDialogEvent;
 import com.example.barmanagarfront.models.Customer;
 import com.example.barmanagarfront.models.Employee;
+import com.example.barmanagarfront.models.EmployeeMapper;
+import com.example.barmanagarfront.models.EmployeeMapper.EmployeeDto;
 import com.example.barmanagarfront.services.EmployeeService;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.ComponentEvent;
@@ -21,8 +23,11 @@ import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.binder.BeanValidationBinder;
 import com.vaadin.flow.data.binder.Binder;
 import com.vaadin.flow.shared.Registration;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+
+import javax.swing.*;
 
 public class NewEmployeeDialog extends Dialog
 {
@@ -35,6 +40,7 @@ public class NewEmployeeDialog extends Dialog
     private Button closeButton;
     private Binder<Employee> employeeBinder;
     private String branchId;
+    private EmployeeDto employeeDto;
     public <T extends ComponentEvent<?>> Registration addListener(Class<T> eventType,
                                                                   ComponentEventListener<T> listener)
     {
@@ -46,29 +52,65 @@ public class NewEmployeeDialog extends Dialog
         this.setHeaderTitle("New Employee");
         VerticalLayout dialogLayout = createDialogLayout();
         this.branchId = branchId;
-        employeeBinder = new BeanValidationBinder<>(Employee.class);
-        employeeBinder.forMemberField(idNumber).asRequired();
-        employeeBinder.forMemberField(salaryPerHour).asRequired();
-        employeeBinder.forMemberField(firstName).asRequired();
-        employeeBinder.forMemberField(lastName).asRequired();
-        employeeBinder.bindInstanceFields(this);
+        initBinder();
+
+
+        add(dialogLayout,buildBottomToolbar());
+
+    }
+    public NewEmployeeDialog(EmployeeService employeeService, EmployeeDto employeeDto)
+    {
+        this.employeeService = employeeService;
+        this.setHeaderTitle("New Employee");
+        this.employeeDto = employeeDto;
+        VerticalLayout dialogLayout = createDialogLayout();
+        this.branchId = null;
+        initBinder();
 
 
         add(dialogLayout,buildBottomToolbar());
 
     }
 
+    private void initBinder()
+    {
+        employeeBinder = new BeanValidationBinder<>(Employee.class);
+        employeeBinder.forMemberField(idNumber).asRequired();
+        employeeBinder.forMemberField(salaryPerHour).asRequired();
+        employeeBinder.forMemberField(firstName).asRequired();
+        employeeBinder.forMemberField(lastName).asRequired();
+        employeeBinder.bindInstanceFields(this);
+    }
+
 
     private VerticalLayout createDialogLayout()
     {
-        firstName = new TextField("First name");
-        lastName = new TextField("Last name");
-        idNumber = new IntegerField("Id");
-        salaryPerHour = new NumberField("salary");
+        VerticalLayout dialogLayout;
+        if ( employeeDto == null ){
+            firstName = new TextField("First name");
+            lastName = new TextField("Last name");
+            idNumber = new IntegerField("Id");
+            salaryPerHour = new NumberField("salary");
+            dialogLayout = new VerticalLayout(idNumber,firstName,lastName,salaryPerHour);
+
+        }
+        else {
+            String[] splitName = StringUtils.split(employeeDto.getFullName());
+            firstName = new TextField("First name");
+            firstName.setValue(splitName[0]);
+            lastName = new TextField("Last name");
+            lastName.setValue(splitName[1]);
+            idNumber = new IntegerField();
+            salaryPerHour = new NumberField();
+            salaryPerHour.setValue(employeeDto.getSalaryPerHour());
+            dialogLayout = new VerticalLayout(firstName,lastName,salaryPerHour);
+
+        }
+
         configureSalaryField();
 
 
-        VerticalLayout dialogLayout = new VerticalLayout(idNumber,firstName,lastName,salaryPerHour);
+//         dialogLayout = new VerticalLayout(idNumber,firstName,lastName,salaryPerHour);
         dialogLayout.setPadding(false);
         dialogLayout.setSpacing(false);
         dialogLayout.setAlignItems(FlexComponent.Alignment.STRETCH);
@@ -76,6 +118,8 @@ public class NewEmployeeDialog extends Dialog
 
         return dialogLayout;
     }
+
+
 
     private void configureSalaryField()
     {
@@ -95,12 +139,25 @@ public class NewEmployeeDialog extends Dialog
         employeeBinder.addStatusChangeListener(statusChangeEvent ->
                 createButton.setEnabled(employeeBinder.isValid()));
 
-        return new HorizontalLayout(createButton);
+        Button updateButton = new Button("update");
+        updateButton.setEnabled(employeeDto != null);
+        updateButton.addClickListener(buttonClickEvent -> updateEmployee());
+
+        return new HorizontalLayout(createButton,updateButton);
+    }
+
+    private void updateEmployee()
+    {
+        Employee employee = new Employee(firstName.getValue(),lastName.getValue(),salaryPerHour.getValue(),
+                0);
+        employeeService.updateEmployee(employee,employeeDto.getId());
+        fireEvent(new ClosCustomerDialogEvent(this,false));
+
     }
 
     private void createEmployee()
     {
-        Employee employee = new Employee(firstName.getValue(),lastName.getValue(),salaryPerHour.getValue(),
+         Employee employee = new Employee(firstName.getValue(),lastName.getValue(),salaryPerHour.getValue(),
                 idNumber.getValue());
         ResponseEntity<Employee> responseEntity = employeeService.saveEmployee(employee,branchId);
         if ( responseEntity.getStatusCode().equals(HttpStatus.CREATED) )
