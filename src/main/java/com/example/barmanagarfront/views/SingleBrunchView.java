@@ -6,30 +6,31 @@ import com.example.barmanagarfront.models.BrunchMapper.BrunchDto;
 import com.example.barmanagarfront.models.EmployeeMapper.EmployeeDto;
 import com.example.barmanagarfront.services.BrunchService;
 import com.example.barmanagarfront.services.EmployeeService;
-import com.example.barmanagarfront.views.dialogs.NewCustomerDialog;
 import com.example.barmanagarfront.views.dialogs.NewEmployeeDialog;
 import com.vaadin.flow.component.Component;
+import com.vaadin.flow.component.HasComponents;
+import com.vaadin.flow.component.HasStyle;
 import com.vaadin.flow.component.Text;
-import com.vaadin.flow.component.avatar.Avatar;
 import com.vaadin.flow.component.button.Button;
+import com.vaadin.flow.component.dependency.CssImport;
 import com.vaadin.flow.component.grid.ColumnTextAlign;
 import com.vaadin.flow.component.grid.Grid;
-import com.vaadin.flow.component.html.Div;
+import com.vaadin.flow.component.html.H3;
+import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
-import com.vaadin.flow.component.virtuallist.VirtualList;
-import com.vaadin.flow.data.renderer.ComponentRenderer;
-import com.vaadin.flow.dom.ElementFactory;
+import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.router.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Route(value = "Branches/:branchId",layout = MainLayout.class)
 @PageTitle("Bar | Brunch ")
-public class SingleBrunchView extends VerticalLayout implements BeforeEnterObserver
+//@CssImport("frontend/themes/myapp/views/Single-Branch-View.css")
+public class SingleBrunchView extends VerticalLayout implements BeforeEnterObserver, HasComponents, HasStyle
 {
     private final Logger logger;
     private final BrunchService brunchService;
@@ -41,8 +42,10 @@ public class SingleBrunchView extends VerticalLayout implements BeforeEnterObser
     private List<EmployeeDto> employeeDtoList;
     private VerticalLayout employeesLayout;
     private Button newEmployeeButton;
+
     public SingleBrunchView(BrunchService brunchService, EmployeeService employeeService)
     {
+
         logger = LoggerFactory.getLogger(SingleBrunchView.class);
         this.brunchService = brunchService;
         this.employeeService = employeeService;
@@ -79,11 +82,18 @@ public class SingleBrunchView extends VerticalLayout implements BeforeEnterObser
 
     private Component getContent()
     {
+        VerticalLayout notInBranchEmployeeLayout = new VerticalLayout();
+        H3 availableEmployeesTitle = new H3("Available employees");
+        notInBranchEmployeeLayout.add(availableEmployeesTitle,notInBranchEmployee);
+        VerticalLayout branchEmployeeLayout = new VerticalLayout();
+        branchEmployeeLayout.add(new H3("Employees in branch"),employeeDtoGrid);
 
-        HorizontalLayout content = new HorizontalLayout(employeeDtoGrid,newEmployeeButton,notInBranchEmployee);
-        content.setFlexGrow(2, employeeDtoGrid);
+        HorizontalLayout content = new HorizontalLayout(branchEmployeeLayout,newEmployeeButton,
+                notInBranchEmployeeLayout);
+//        content.setFlexGrow(2, employeeDtoGrid);
         content.setFlexGrow(1, content);
         content.setSizeFull();
+
         return content;
     }
 
@@ -93,8 +103,48 @@ public class SingleBrunchView extends VerticalLayout implements BeforeEnterObser
         notInBranchEmployee.addColumn(employeeDto -> employeeDto.getFullName())
                 .setHeader("Employee")
                 .setTextAlign(ColumnTextAlign.CENTER);
+        notInBranchEmployee.addComponentColumn(this::createAddButtonColumn);
         updateNotInBranchGrid();
 
+    }
+
+    private Component createAddButtonColumn(EmployeeDto employeeDto)
+    {
+        Button addEmployee = new Button("Add", VaadinIcon.PLUS.create());
+
+        addEmployee.addClickListener(buttonClickEvent -> addEmployeeToBranch(employeeDto));
+
+        HorizontalLayout horizontalLayout = new HorizontalLayout(addEmployee);
+        horizontalLayout.setJustifyContentMode(JustifyContentMode.CENTER);
+        return horizontalLayout;
+    }
+
+    private Component createRemoveButtonColumn(EmployeeDto employeeDto)
+    {
+        Button addEmployee = new Button("Remove", VaadinIcon.TRASH.create());
+
+        addEmployee.addClickListener(buttonClickEvent -> {
+            System.out.println(buttonClickEvent);
+            removeEmployeeFromBranch(employeeDto);
+        });
+
+        HorizontalLayout horizontalLayout = new HorizontalLayout(addEmployee);
+        horizontalLayout.setJustifyContentMode(JustifyContentMode.CENTER);
+        return horizontalLayout;
+    }
+
+    private void removeEmployeeFromBranch(EmployeeDto employeeDto)
+    {
+        brunchService.removeEmployeeFromBranch(branchId,employeeDto.getId());
+        updateNotInBranchGrid();
+        updateEmployeeGrid();
+    }
+
+    private void addEmployeeToBranch(EmployeeDto employeeDto)
+    {
+        brunchService.addEmployeeToBranch(branchId,employeeDto.getId());
+        updateNotInBranchGrid();
+        updateEmployeeGrid();
     }
 
     private void updateNotInBranchGrid()
@@ -108,13 +158,25 @@ public class SingleBrunchView extends VerticalLayout implements BeforeEnterObser
         employeeDtoGrid.setAllRowsVisible(true);
         employeeDtoGrid.addColumn(employeeDto -> employeeDto.getFullName()).setHeader("Employee")
                 .setTextAlign(ColumnTextAlign.CENTER);
+        employeeDtoGrid.addComponentColumn(employeeDto -> createRemoveButtonColumn(employeeDto));
         updateEmployeeGrid();
+
     }
 
     private void updateEmployeeGrid()
     {
-        this.employeeDtoList = employeeService.getBranchEmployees(branchId);
-        employeeDtoGrid.setItems(this.employeeDtoList);
+        try{
+            this.employeeDtoList = employeeService.getBranchEmployees(branchId);
+
+        } catch (NullPointerException exception)
+        {
+            this.employeeDtoList = new ArrayList<>();
+        }
+        finally
+        {
+            employeeDtoGrid.setItems(this.employeeDtoList);
+        }
+
 
     }
 
@@ -125,10 +187,17 @@ public class SingleBrunchView extends VerticalLayout implements BeforeEnterObser
         System.out.println("before");
         branchId = beforeEnterEvent.getRouteParameters().get("branchId").get();
         this.brunchDto = brunchService.getBranch(branchId);
-        employeeDtoList = employeeService.getBranchEmployees(brunchDto.getBrunchId());
+      /*  try
+        {
+            employeeDtoList = employeeService.getBranchEmployees(brunchDto.getBrunchId());
+        }
+        catch (NullPointerException exception)
+        {
+            this.employeeDtoList = new ArrayList<>();
+        }*/
         initEmployeesGrid();
         setupNotInBranchGrid();
-        employeesLayout.add(new Text(brunchDto.getBrunchName()));
+        employeesLayout.add(new Text(brunchDto.getBranchName()));
     }
 
 

@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 @Service
 public class EmployeeService
@@ -25,20 +26,28 @@ public class EmployeeService
         this.logger = LoggerFactory.getLogger(BrunchService.class);
     }
 
-    public ArrayList<EmployeeDto> getBranchEmployees(String idOfBranch)
+    public ArrayList<EmployeeDto> getBranchEmployees(String idOfBranch) throws NullPointerException
     {
         String url = String.format("http://localhost:8080/employees/findByBranches/%s",idOfBranch);
         ResponseEntity<EmployeeMapper> response = restTemplate.getForEntity(url, EmployeeMapper.class);
-        ArrayList<EmployeeDto> employeeDtos = response.getBody().get_embedded().employeeDtoList;
+        ArrayList<EmployeeDto> employeeDtos = Objects.requireNonNull(response.getBody()).get_embedded().employeeDtoList;
+
 
         return employeeDtos;
     }
 
     public ArrayList<EmployeeDto> getAllEmployees(String branchId)
     {
+        ArrayList<EmployeeDto> employeeDtos;
         String url = String.format("http://localhost:8080/employees/filterByBranch?brunchId=%s",branchId);
         ResponseEntity<EmployeeMapper> response = restTemplate.getForEntity(url, EmployeeMapper.class);
-        ArrayList<EmployeeDto> employeeDtos = response.getBody().get_embedded().employeeDtoList;
+        try{
+
+            employeeDtos = response.getBody().get_embedded().employeeDtoList;
+        }catch (NullPointerException exception)
+        {
+            employeeDtos = new ArrayList<>();
+        }
         logger.info(employeeDtos.toString());
 
         return employeeDtos;

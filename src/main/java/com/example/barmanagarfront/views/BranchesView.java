@@ -6,6 +6,7 @@ import com.example.barmanagarfront.models.BrunchMapper.BrunchDto;
 import com.example.barmanagarfront.observers.Seat;
 import com.example.barmanagarfront.services.BrunchService;
 import com.example.barmanagarfront.views.OrderBuilderForm;
+import com.example.barmanagarfront.views.dialogs.NewBranchDialog;
 import com.example.barmanagarfront.views.dialogs.OrderBillDialog;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.Text;
@@ -29,7 +30,7 @@ public class BranchesView extends VerticalLayout
     private final BrunchService brunchService;
     private Grid<BrunchDto> brunchDtoGrid;
     private List<BrunchDto> brunchList;
-
+    private Button newBranchButton;
     public BranchesView(BrunchService brunchService)
     {
         this.brunchService = brunchService;
@@ -57,7 +58,7 @@ public class BranchesView extends VerticalLayout
 
         title = new H1(new Text("Branches"));
         VerticalLayout newBranchLayout = new VerticalLayout();
-        Button newBranchButton = new Button("Add Branch");
+        setupNewBranchButton();
         newBranchLayout.setAlignItems(Alignment.CENTER);
         newBranchLayout.add(newBranchButton);
 
@@ -65,10 +66,28 @@ public class BranchesView extends VerticalLayout
         return headerContainer;
     }
 
+    private void setupNewBranchButton()
+    {
+        newBranchButton = new Button("new branch");
+        newBranchButton.setIcon(VaadinIcon.HOME_O.create());
+        newBranchButton.addClickListener(buttonClickEvent -> createNewBranch());
+
+    }
+
+    private void createNewBranch()
+    {
+        NewBranchDialog newBranchDialog = new NewBranchDialog(brunchService);
+        newBranchDialog.addListener(ClosCustomerDialogEvent.class,closeEvent ->{
+        newBranchDialog.close();
+        updateGrid();
+        });
+        newBranchDialog.open();
+    }
+
     private void initGrid()
     {
         brunchDtoGrid.setAllRowsVisible(true);
-        brunchDtoGrid.addColumn(brunchDto -> brunchDto.getBrunchName()).setHeader("Brunch");
+        brunchDtoGrid.addColumn(brunchDto -> brunchDto.getBranchName()).setHeader("Brunch");
         brunchDtoGrid.addColumn(brunchDto -> brunchDto.getEmployeesIds().size()).setHeader("Employees");
         brunchDtoGrid.addComponentColumn(brunchDto -> createButtons(brunchDto));
 

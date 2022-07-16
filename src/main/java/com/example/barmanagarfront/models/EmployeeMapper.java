@@ -20,6 +20,7 @@ public class EmployeeMapper
     public static class EmployeeDto
     {
         public String fullName;
+        public String id;
         public double salaryPerHour;
 
     }

@@ -24,7 +24,7 @@ public class BrunchMapper
     @NoArgsConstructor
     public static class BrunchDto
     {
-        public String brunchName;
+        public String branchName;
         public String brunchId;
         public int numOfOrders;
         public double totalOrdersBill;
