@@ -7,6 +7,7 @@ import com.example.barmanagarfront.services.EmployeeService;
 import com.example.barmanagarfront.views.dialogs.NewEmployeeDialog;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.button.Button;
+import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
@@ -57,10 +58,21 @@ public class EmployeesView extends VerticalLayout
         Button openEmployeeDialog = new Button("Update", VaadinIcon.POINTER.create());
         openEmployeeDialog.addClickListener(buttonClickEvent -> openDialog(employeeDto));
 
+        Button removeEmployee = new Button(VaadinIcon.TRASH.create());
+        removeEmployee.addThemeVariants(ButtonVariant.LUMO_ERROR);
+        removeEmployee.addClickListener(buttonClickEvent -> removeEmployee(employeeDto));
 
-        HorizontalLayout horizontalLayout = new HorizontalLayout(openEmployeeDialog);
+
+        HorizontalLayout horizontalLayout = new HorizontalLayout(openEmployeeDialog,removeEmployee);
         horizontalLayout.setJustifyContentMode(JustifyContentMode.CENTER);
         return horizontalLayout;
+    }
+
+    private void removeEmployee(EmployeeDto employeeDto)
+    {
+        System.out.println("Delete");
+        employeeService.deleteEmployee(employeeDto.getId());
+        updateGrid();
     }
 
     private void openDialog(EmployeeDto employeeDto)

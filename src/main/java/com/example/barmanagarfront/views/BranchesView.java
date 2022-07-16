@@ -120,6 +120,8 @@ public class BranchesView extends VerticalLayout
         });
 
 
+
+
         HorizontalLayout horizontalLayout = new HorizontalLayout(toBrunchButton);
         horizontalLayout.setJustifyContentMode(JustifyContentMode.CENTER);
         return horizontalLayout;

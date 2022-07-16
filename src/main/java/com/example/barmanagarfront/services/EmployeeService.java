@@ -89,4 +89,12 @@ public class EmployeeService
         restTemplate.put(url,employee, Employee.class);
     }
 
+    public void deleteEmployee(String idToRemove)
+    {
+        String url = String.format("http://localhost:8080/employees/%s",idToRemove);
+
+        restTemplate.delete(url,Employee.class);
+
+    }
+
 }
