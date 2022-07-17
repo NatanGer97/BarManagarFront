@@ -45,7 +45,6 @@ public class MainLayout extends AppLayout implements IInventoryObserver
         addToDrawer(tabs);
         addToNavbar(drawerToggle, title);
         CartOfDrinksManager.getInstance().addObserver(this);
-
     }
 
     private Tabs getTabs()
@@ -56,6 +55,7 @@ public class MainLayout extends AppLayout implements IInventoryObserver
         tabs.add(createTab(VaadinIcon.GLASS, "Bar Inventory", InventoryView.class ));
         tabs.add(createTab(VaadinIcon.WRENCH,"Manage Inventory", InventoryManagementView.class));
         tabs.add(createTab(VaadinIcon.CART_O, "Added", CartView.class ));
+        tabs.add(createTab(VaadinIcon.CHART, "Information", InfoView.class));
         tabs.add(createTab(VaadinIcon.SEARCH, "OrderHistory", OrdersView.class ));
         tabs.add(createTab(VaadinIcon.LOCATION_ARROW, "Branches View", BranchesView.class ));
 
