@@ -4,16 +4,15 @@ import com.example.barmanagarfront.MainLayout;
 import com.example.barmanagarfront.Singeltones.SeatsManager;
 import com.example.barmanagarfront.enums.eSeatStatus;
 import com.example.barmanagarfront.events.ClosCustomerDialogEvent;
-import com.example.barmanagarfront.models.BrunchMapper.BrunchDto;
+import com.example.barmanagarfront.models.BranchMapper.BranchDto;
 import com.example.barmanagarfront.models.OrderResponseObject.OrderDto;
 import com.example.barmanagarfront.observers.ISeatStatusObserver;
 import com.example.barmanagarfront.observers.Seat;
-import com.example.barmanagarfront.services.BrunchService;
+import com.example.barmanagarfront.services.BranchService;
 import com.example.barmanagarfront.services.OrderService;
 import com.example.barmanagarfront.views.dialogs.OrderBillDialog;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.Text;
-import com.vaadin.flow.component.avatar.Avatar;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.grid.ColumnTextAlign;
 import com.vaadin.flow.component.grid.Grid;
@@ -21,12 +20,8 @@ import com.vaadin.flow.component.html.*;
 import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.FlexComponent;
-import com.vaadin.flow.component.orderedlayout.FlexLayout;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
-import com.vaadin.flow.component.select.Select;
-import com.vaadin.flow.component.textfield.TextField;
-import com.vaadin.flow.data.renderer.ComponentRenderer;
 import com.vaadin.flow.router.*;
 
 import java.util.ArrayList;
@@ -41,10 +36,10 @@ public class SeatView extends VerticalLayout implements ISeatStatusObserver
     private Grid<Seat> seatGrid;
     private List<Seat> seats;
     private List<OrderDto> orderDtos;
-    private final BrunchService brunchService;
-    private BrunchDto selecedBrunchDto;
+    private final BranchService brunchService;
+    private BranchDto selecedBrunchDto;
 
-    public SeatView(OrderService orderService, BrunchService brunchService)
+    public SeatView(OrderService orderService, BranchService brunchService)
     {
         this.brunchService = brunchService;
 

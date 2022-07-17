@@ -6,7 +6,7 @@ import com.example.barmanagarfront.models.BarDrink;
 import com.example.barmanagarfront.models.Customer;
 import com.example.barmanagarfront.models.CustomerAsDto;
 import com.example.barmanagarfront.models.Order;
-import com.example.barmanagarfront.services.BrunchService;
+import com.example.barmanagarfront.services.BranchService;
 import com.example.barmanagarfront.services.CustomerService;
 import com.example.barmanagarfront.services.InventoryService;
 import com.example.barmanagarfront.services.OrderService;
@@ -19,18 +19,14 @@ import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.grid.ColumnTextAlign;
 import com.vaadin.flow.component.grid.Grid;
-import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.notification.NotificationVariant;
 import com.vaadin.flow.component.orderedlayout.FlexComponent;
-import com.vaadin.flow.component.orderedlayout.FlexLayout;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
-import com.vaadin.flow.component.select.Select;
 import com.vaadin.flow.component.textfield.NumberField;
-import com.vaadin.flow.data.renderer.ComponentRenderer;
 import com.vaadin.flow.router.BeforeEnterEvent;
 import com.vaadin.flow.router.BeforeEnterObserver;
 import com.vaadin.flow.router.PageTitle;
@@ -49,7 +45,7 @@ public class OrderBuilderForm extends VerticalLayout implements BeforeEnterObser
 {
     private final InventoryService inventoryService;
     private final CustomerService customerService;
-    private final BrunchService brunchService;
+    private final BranchService brunchService;
     private final OrderService orderService;
 
     private Map<BarDrink, Integer> orderedDrinksWithAmount;
@@ -66,7 +62,7 @@ public class OrderBuilderForm extends VerticalLayout implements BeforeEnterObser
 
     public OrderBuilderForm(InventoryService inventoryService,
                             CustomerService service,
-                            BrunchService brunchService, OrderService orderService)
+                            BranchService brunchService, OrderService orderService)
     {
         this.inventoryService = inventoryService;
         this.customerService = service;

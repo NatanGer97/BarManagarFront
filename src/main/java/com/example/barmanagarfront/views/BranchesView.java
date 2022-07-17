@@ -2,11 +2,10 @@ package com.example.barmanagarfront.views;
 
 import com.example.barmanagarfront.MainLayout;
 import com.example.barmanagarfront.events.ClosCustomerDialogEvent;
-import com.example.barmanagarfront.models.BrunchMapper.BrunchDto;
-import com.example.barmanagarfront.services.BrunchService;
+import com.example.barmanagarfront.models.BranchMapper.BranchDto;
+import com.example.barmanagarfront.services.BranchService;
 import com.example.barmanagarfront.views.dialogs.NewBranchDialog;
 import com.vaadin.flow.component.Component;
-import com.vaadin.flow.component.Text;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.grid.ColumnTextAlign;
@@ -26,15 +25,15 @@ import java.util.List;
 public class BranchesView extends VerticalLayout
 {
 
-    private final BrunchService brunchService;
-    private Grid<BrunchDto> brunchDtoGrid;
-    private List<BrunchDto> brunchList;
+    private final BranchService brunchService;
+    private Grid<BranchDto> brunchDtoGrid;
+    private List<BranchDto> brunchList;
     private Button newBranchButton,getAllEmployees;
-    public BranchesView(BrunchService brunchService)
+    public BranchesView(BranchService brunchService)
     {
         this.brunchService = brunchService;
-        brunchList = brunchService.getBrunchesDtos();
-        brunchDtoGrid = new Grid<>(BrunchDto.class,false);
+        brunchList = brunchService.getBranchesDtos();
+        brunchDtoGrid = new Grid<>(BranchDto.class,false);
 
         setupTitleSection();
 
@@ -111,19 +110,19 @@ public class BranchesView extends VerticalLayout
 
     private void updateGrid()
     {
-        brunchDtoGrid.setItems(brunchService.getBrunchesDtos());
+        brunchDtoGrid.setItems(brunchService.getBranchesDtos());
     }
 
-    private Component createButtons(BrunchDto brunchDto)
+    private Component createButtons(BranchDto brunchDto)
     {
         Button toBrunchButton = new Button("Enter", VaadinIcon.POINTER.create());
         toBrunchButton.addThemeVariants(ButtonVariant.LUMO_TERTIARY);
         toBrunchButton.setIconAfterText(true);
 
         toBrunchButton.addClickListener(buttonClickEvent -> {
-            System.out.println(brunchDto.getBrunchId());
+            System.out.println(brunchDto.getBranchId());
             toBrunchButton.getUI().ifPresent(ui -> ui.navigate(SingleBrunchView.class,
-                    new RouteParameters("branchId",brunchDto.getBrunchId())));
+                    new RouteParameters("branchId",brunchDto.getBranchId())));
         });
 
         Button removeButton = new Button("Remove");
@@ -131,7 +130,7 @@ public class BranchesView extends VerticalLayout
         removeButton.setIcon(VaadinIcon.TRASH.create());
         removeButton.addThemeVariants(ButtonVariant.LUMO_ERROR,ButtonVariant.LUMO_TERTIARY);
         removeButton.addClickListener(event -> {
-            brunchService.removeBranch(brunchDto.getBrunchId());
+            brunchService.removeBranch(brunchDto.getBranchId());
             updateGrid();
         });
 

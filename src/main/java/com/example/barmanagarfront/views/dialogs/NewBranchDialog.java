@@ -2,8 +2,7 @@ package com.example.barmanagarfront.views.dialogs;
 
 import com.example.barmanagarfront.events.ClosCustomerDialogEvent;
 import com.example.barmanagarfront.models.Branch;
-import com.example.barmanagarfront.models.Employee;
-import com.example.barmanagarfront.services.BrunchService;
+import com.example.barmanagarfront.services.BranchService;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.ComponentEvent;
 import com.vaadin.flow.component.ComponentEventListener;
@@ -24,7 +23,7 @@ import org.springframework.http.ResponseEntity;
 
 public class NewBranchDialog extends Dialog
 {
-    private final BrunchService brunchService;
+    private final BranchService brunchService;
     private TextField branchName,country,city;
     private Button saveButton, closeButton;
     private Binder<Branch> branchBinder;
@@ -36,7 +35,7 @@ public class NewBranchDialog extends Dialog
         return getEventBus().addListener(eventType, listener);
     }
 
-    public NewBranchDialog(BrunchService brunchService)
+    public NewBranchDialog(BranchService brunchService)
     {
         this.brunchService = brunchService;
         this.setHeaderTitle("New Branch");

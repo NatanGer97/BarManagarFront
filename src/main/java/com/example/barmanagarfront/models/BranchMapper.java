@@ -10,7 +10,7 @@ import java.util.ArrayList;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 @Data
-public class BrunchMapper
+public class BranchMapper
 {
     @JsonProperty("_embedded")
     public Embedded _embedded;
@@ -18,14 +18,14 @@ public class BrunchMapper
     @Data
     @JsonRootName("Embedded")
     public class Embedded{
-        public ArrayList<BrunchDto> brunchDtoList;
+        public ArrayList<BranchDto> branchDtoList;
     }
     @Data
     @NoArgsConstructor
-    public static class BrunchDto
+    public static class BranchDto
     {
         public String branchName;
-        public String brunchId;
+        public String branchId;
         public int numOfOrders;
         public double totalOrdersBill;
         public int numOfEmployees;

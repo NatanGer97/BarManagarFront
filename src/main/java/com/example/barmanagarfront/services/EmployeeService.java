@@ -23,7 +23,7 @@ public class EmployeeService
     public EmployeeService(RestTemplateBuilder restTemplateBuilder)
     {
         this.restTemplate = restTemplateBuilder.build();
-        this.logger = LoggerFactory.getLogger(BrunchService.class);
+        this.logger = LoggerFactory.getLogger(BranchService.class);
     }
 
     public ArrayList<EmployeeDto> getBranchEmployees(String idOfBranch) throws NullPointerException

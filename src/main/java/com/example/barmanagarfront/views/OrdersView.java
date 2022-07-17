@@ -36,16 +36,31 @@ public class OrdersView extends VerticalLayout
     private void initGrid()
     {
         orderDtoGrid.setAllRowsVisible(true);
+        orderDtoGrid.addColumn(orderDto -> orderDtos.indexOf(orderDto) + 1).setHeader("Index")
+                        .setTextAlign(ColumnTextAlign.CENTER);
         orderDtoGrid.addColumn(orderDto -> orderDto.getOrderName()).setHeader("Order")
                 .setTextAlign(ColumnTextAlign.CENTER);
         orderDtoGrid.addComponentColumn(orderDto -> createStatusLabel(orderDto.getOrderStatus()))
-                .setHeader("Status");
-        orderDtoGrid.addColumn(orderDto -> orderDto.getOrderDate()).setHeader("Date");
-        orderDtoGrid.addColumn(orderDto -> orderDto.getOrderBill()).setHeader("Bill").setSortable(true);
+                .setHeader("Status").setTextAlign(ColumnTextAlign.CENTER);
+        orderDtoGrid.addColumn(orderDto -> orderDto.getOrderDate()).setHeader("Date")
+                        .setTextAlign(ColumnTextAlign.CENTER);
+        orderDtoGrid.addColumn(orderDto -> orderDto.getOrderBill()).setHeader("Bill").setSortable(true)
+                        .setTextAlign(ColumnTextAlign.CENTER).setFooter(calcSum());
+
 
 
 
         updateSeatGrid();
+    }
+
+    private String calcSum()
+    {
+        double sum = 0.0;
+        for ( OrderResponseObject.OrderDto orderDto : orderDtos )
+        {
+            sum += orderDto.getOrderBill();
+        }
+        return String.format("Total: %.2f",sum);
     }
 
     private void updateSeatGrid()

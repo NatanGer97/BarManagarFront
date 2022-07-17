@@ -2,9 +2,9 @@ package com.example.barmanagarfront.views;
 
 import com.example.barmanagarfront.MainLayout;
 import com.example.barmanagarfront.events.ClosCustomerDialogEvent;
-import com.example.barmanagarfront.models.BrunchMapper.BrunchDto;
+import com.example.barmanagarfront.models.BranchMapper.BranchDto;
 import com.example.barmanagarfront.models.EmployeeMapper.EmployeeDto;
-import com.example.barmanagarfront.services.BrunchService;
+import com.example.barmanagarfront.services.BranchService;
 import com.example.barmanagarfront.services.EmployeeService;
 import com.example.barmanagarfront.views.dialogs.NewEmployeeDialog;
 import com.vaadin.flow.component.Component;
@@ -31,17 +31,17 @@ import java.util.List;
 public class SingleBrunchView extends VerticalLayout implements BeforeEnterObserver, HasComponents, HasStyle
 {
     private final Logger logger;
-    private final BrunchService brunchService;
+    private final BranchService brunchService;
     private final EmployeeService employeeService;
     private String branchId;
     private Grid<EmployeeDto> employeeDtoGrid;
     private Grid<EmployeeDto> notInBranchEmployee;
-    private  BrunchDto brunchDto;
+    private BranchDto brunchDto;
     private List<EmployeeDto> employeeDtoList;
     private VerticalLayout employeesLayout;
     private Button newEmployeeButton;
 
-    public SingleBrunchView(BrunchService brunchService, EmployeeService employeeService)
+    public SingleBrunchView(BranchService brunchService, EmployeeService employeeService)
     {
 
         logger = LoggerFactory.getLogger(SingleBrunchView.class);
@@ -187,7 +187,7 @@ public class SingleBrunchView extends VerticalLayout implements BeforeEnterObser
         this.brunchDto = brunchService.getBranch(branchId);
       /*  try
         {
-            employeeDtoList = employeeService.getBranchEmployees(brunchDto.getBrunchId());
+            employeeDtoList = employeeService.getBranchEmployees(brunchDto.getBranchId());
         }
         catch (NullPointerException exception)
         {
