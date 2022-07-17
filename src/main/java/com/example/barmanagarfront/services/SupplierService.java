@@ -1,9 +1,6 @@
 package com.example.barmanagarfront.services;
 
-import com.example.barmanagarfront.models.ApiDrink;
-import com.example.barmanagarfront.models.ResponseOfDrinksJson;
-import com.example.barmanagarfront.models.BarDrink;
-import com.example.barmanagarfront.models.ResponseOfInventoryDrink;
+import com.example.barmanagarfront.models.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.web.client.RestTemplateBuilder;
@@ -73,7 +70,4 @@ public class SupplierService
     String url = "http://localhost:8080/inventory/%s";
     restTemplate.delete(String.format(url,id));
   }
-
-
-
 }

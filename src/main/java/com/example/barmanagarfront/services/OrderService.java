@@ -3,6 +3,7 @@ package com.example.barmanagarfront.services;
 import com.example.barmanagarfront.models.Order;
 import com.example.barmanagarfront.models.OrderResponseObject;
 import com.example.barmanagarfront.models.OrderResponseObject.OrderDto;
+import com.example.barmanagarfront.models.QueryResult;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.web.client.RestTemplateBuilder;
@@ -12,6 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
@@ -102,6 +104,19 @@ public class OrderService
         }
 
         return orderDtoList;
+    }
 
+    public List<QueryResult> getProfitsByYear(int year){
+        String url = String.format("http://localhost:8080/orders/profits?year=%s", year);
+        ResponseEntity<QueryResult[]> response = restTemplate.getForEntity(url, QueryResult[].class);
+
+        return Arrays.stream(Objects.requireNonNull(response.getBody())).toList();
+    }
+
+    public List<QueryResult> getMostPopularDrinks(){
+        String url = "http://localhost:8080/orders/drinkPopularity";
+        ResponseEntity<QueryResult[]> response = restTemplate.getForEntity(url, QueryResult[].class);
+
+        return Arrays.stream(Objects.requireNonNull(response.getBody())).toList();
     }
 }
