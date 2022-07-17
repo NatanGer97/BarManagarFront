@@ -83,5 +83,12 @@ public class BrunchService
         return responseEntityCustomer;
     }
 
+    public void removeBranch(String branchIdToRemove)
+    {
+        String url = String.format("http://localhost:8080/branches/%s", branchIdToRemove);
+
+        restTemplate.delete(url,Branch.class);
+    }
+
 
 }
