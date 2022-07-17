@@ -1,6 +1,7 @@
 package com.example.barmanagarfront.services;
 
 import com.example.barmanagarfront.models.BarDrink;
+import com.example.barmanagarfront.models.QueryResult;
 import com.example.barmanagarfront.models.ResponseOfInventoryDrink;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -11,7 +12,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 
 @Service
 public class InventoryService
@@ -22,7 +25,7 @@ public class InventoryService
     public InventoryService(RestTemplateBuilder restTemplateBuilder)
     {
         this.restTemplate = restTemplateBuilder.build();
-        logger = LoggerFactory.getLogger(SupplierService.class);
+        logger = LoggerFactory.getLogger(InventoryService.class);
     }
 
     public ArrayList<BarDrink> getInventoryItems()
@@ -30,9 +33,15 @@ public class InventoryService
         String url = "http://localhost:8080/inventory";
         ResponseEntity<ResponseOfInventoryDrink> response = restTemplate.getForEntity(
                 url,ResponseOfInventoryDrink.class);
-        System.out.println(response.getBody().getBarDrinkList());
-        return response.getBody().getBarDrinkList().getBarDrinkList();
 
+        return response.getBody().getBarDrinkList().getBarDrinkList();
+    }
+
+    public BarDrink getDrinkById(String id){
+        String url = String.format("http://localhost:8080//inventory/%s", id);
+        ResponseEntity<BarDrink> response = restTemplate.getForEntity(url, BarDrink.class);
+
+        return response.getBody();
     }
 
     public HttpStatus saveDrinkToInventory(BarDrink barDrink)
@@ -61,5 +70,17 @@ public class InventoryService
         restTemplate.delete(String.format(url,id));
     }
 
+    public List<QueryResult> getInventoryCountByCategory(){
+        String url = "http://localhost:8080/inventory/groupCountByCategory/";
+        ResponseEntity<QueryResult[]> response = restTemplate.getForEntity(
+                url, QueryResult[].class);
+        return Arrays.stream(Objects.requireNonNull(response.getBody())).toList();
+    }
 
+    public List<QueryResult> getInventoryCountByIngredient(){
+        String url = "http://localhost:8080/inventory/getIngredientsCount/";
+        ResponseEntity<QueryResult[]> response = restTemplate.getForEntity(
+                url, QueryResult[].class);
+        return Arrays.stream(Objects.requireNonNull(response.getBody())).toList();
+    }
 }

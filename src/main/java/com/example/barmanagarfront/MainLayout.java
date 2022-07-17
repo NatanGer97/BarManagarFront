@@ -8,23 +8,16 @@ import com.vaadin.flow.component.applayout.AppLayout;
 import com.vaadin.flow.component.applayout.DrawerToggle;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.html.H1;
-import com.vaadin.flow.component.html.Image;
 import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.notification.NotificationVariant;
-import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.tabs.Tab;
 import com.vaadin.flow.component.tabs.Tabs;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.router.RouterLink;
-import com.vaadin.flow.server.StreamResource;
-import com.vaadin.flow.theme.Theme;
-import com.vaadin.flow.theme.lumo.Lumo;
-import com.vaadin.flow.theme.lumo.LumoUtility;
-import org.springframework.core.io.ClassPathResource;
 
 
 @Route(value = "")
@@ -37,19 +30,21 @@ public class MainLayout extends AppLayout implements IInventoryObserver
     {
         this.apiDrinkService = apiDrinkService;
         DrawerToggle drawerToggle = new DrawerToggle();
+
         H1 title = new H1(" Bar ");
-        this.getElement().getStyle().set( "background-image" , "url('piggyBanck1.png')" );
-
-
         title.getStyle()
                 .set("font-size", "var(--lumo-font-size-l)")
                 .set("margin", "0");
         Tabs tabs = getTabs();
-        Button enterButton = new Button("Enter");
+        Button button = new Button("Get");
+        button.addClickListener(buttonClickEvent ->
+        {
+            apiDrinkService.getDrinksCategories();
+        });
+
         addToDrawer(tabs);
         addToNavbar(drawerToggle, title);
         CartOfDrinksManager.getInstance().addObserver(this);
-
     }
 
     private Tabs getTabs()
@@ -60,6 +55,7 @@ public class MainLayout extends AppLayout implements IInventoryObserver
         tabs.add(createTab(VaadinIcon.GLASS, "Bar Inventory", InventoryView.class ));
         tabs.add(createTab(VaadinIcon.WRENCH,"Manage Inventory", InventoryManagementView.class));
         tabs.add(createTab(VaadinIcon.CART_O, "Added", CartView.class ));
+        tabs.add(createTab(VaadinIcon.CHART, "Information", InfoView.class));
         tabs.add(createTab(VaadinIcon.SEARCH, "OrderHistory", OrdersView.class ));
         tabs.add(createTab(VaadinIcon.LOCATION_ARROW, "Branches View", BranchesView.class ));
 
