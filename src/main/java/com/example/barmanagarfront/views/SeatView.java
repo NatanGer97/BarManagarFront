@@ -4,11 +4,11 @@ import com.example.barmanagarfront.MainLayout;
 import com.example.barmanagarfront.Singeltones.SeatsManager;
 import com.example.barmanagarfront.enums.eSeatStatus;
 import com.example.barmanagarfront.events.ClosCustomerDialogEvent;
-import com.example.barmanagarfront.models.Order;
-import com.example.barmanagarfront.models.OrderResponseObject;
+import com.example.barmanagarfront.models.BranchMapper.BranchDto;
 import com.example.barmanagarfront.models.OrderResponseObject.OrderDto;
 import com.example.barmanagarfront.observers.ISeatStatusObserver;
 import com.example.barmanagarfront.observers.Seat;
+import com.example.barmanagarfront.services.BranchService;
 import com.example.barmanagarfront.services.OrderService;
 import com.example.barmanagarfront.views.dialogs.OrderBillDialog;
 import com.vaadin.flow.component.Component;
@@ -22,17 +22,10 @@ import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
-import com.vaadin.flow.router.PageTitle;
-import com.vaadin.flow.router.Route;
-import com.vaadin.flow.router.RouteParam;
-import com.vaadin.flow.router.RouteParameters;
+import com.vaadin.flow.router.*;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 @Route(value = "Seats",layout = MainLayout.class)
 @PageTitle("Bar | Seats ")
@@ -43,10 +36,12 @@ public class SeatView extends VerticalLayout implements ISeatStatusObserver
     private Grid<Seat> seatGrid;
     private List<Seat> seats;
     private List<OrderDto> orderDtos;
+    private final BranchService brunchService;
+    private BranchDto selecedBrunchDto;
 
-
-    public SeatView(OrderService orderService)
+    public SeatView(OrderService orderService, BranchService brunchService)
     {
+        this.brunchService = brunchService;
 
         System.out.println("inside seat view");
         this.orderService = orderService;
@@ -84,7 +79,7 @@ public class SeatView extends VerticalLayout implements ISeatStatusObserver
         headerTitle.addClassNames("mb-0", "mt-xs", "text-xl");
         headerContainer.add(headerTitle);
 
-        headerTitle.add(new H3(new Text("Bar Seats:")));
+        headerTitle.add(new H3(new Text("Seats")));
         return headerContainer;
     }
 
@@ -104,6 +99,8 @@ public class SeatView extends VerticalLayout implements ISeatStatusObserver
 
         updateSeatGrid();
     }
+
+
 
     private Span createStatusLabel(Seat seat)
     {
@@ -148,8 +145,9 @@ public class SeatView extends VerticalLayout implements ISeatStatusObserver
         openButton.addClickListener(buttonClickEvent -> {
             openButton.getUI().ifPresent(ui -> ui.navigate(
                     OrderBuilderForm.class,
-                    new RouteParameters("seat", String.valueOf(seat.getSeatNumber()))));
-                    //            seat.setSeatTaken(!seat.isSeatTaken());
+                    new RouteParameters(new RouteParam("seat", String.valueOf(seat.getSeatNumber())))
+
+            ));
         });
 
         removeButton.addClickListener(buttonClickEvent ->

@@ -6,6 +6,7 @@ import com.example.barmanagarfront.models.BarDrink;
 import com.example.barmanagarfront.models.Customer;
 import com.example.barmanagarfront.models.CustomerAsDto;
 import com.example.barmanagarfront.models.Order;
+import com.example.barmanagarfront.services.BranchService;
 import com.example.barmanagarfront.services.CustomerService;
 import com.example.barmanagarfront.services.InventoryService;
 import com.example.barmanagarfront.services.OrderService;
@@ -38,12 +39,13 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-@Route(value = "BuildOrder/:seat/", layout = MainLayout.class)
+@Route(value = "BuildOrder/:seat/:branchId?", layout = MainLayout.class)
 @PageTitle("Bar | Order Screen")
 public class OrderBuilderForm extends VerticalLayout implements BeforeEnterObserver
 {
     private final InventoryService inventoryService;
     private final CustomerService customerService;
+    private final BranchService brunchService;
     private final OrderService orderService;
 
     private Map<BarDrink, Integer> orderedDrinksWithAmount;
@@ -55,14 +57,16 @@ public class OrderBuilderForm extends VerticalLayout implements BeforeEnterObser
     private NumberField totalNumberField;
     private Order order;
     private int seatNumber;
+    private String branchId;
     private Button placeOrderButton;
 
     public OrderBuilderForm(InventoryService inventoryService,
                             CustomerService service,
-                            OrderService orderService)
+                            BranchService brunchService, OrderService orderService)
     {
         this.inventoryService = inventoryService;
         this.customerService = service;
+        this.brunchService = brunchService;
         this.orderService = orderService;
         try
         {
@@ -93,6 +97,7 @@ public class OrderBuilderForm extends VerticalLayout implements BeforeEnterObser
         {
             order = new Order();
             order.setSeatNumber(seatNumber);
+
         }
     }
 
@@ -293,7 +298,6 @@ public class OrderBuilderForm extends VerticalLayout implements BeforeEnterObser
         return layout;
     }
 
-
     private void placeOrder()
     {
         if ( !order.getOrderedDrinks().isEmpty() )
@@ -367,8 +371,10 @@ public class OrderBuilderForm extends VerticalLayout implements BeforeEnterObser
         if  (beforeEnterEvent.getRouteParameters().get("seat").isPresent())
         {
             seatNumber = Integer.parseInt(beforeEnterEvent.getRouteParameters().get("seat").get());
+
             order.setSeatNumber(seatNumber);
         }
+
 
     }
 }

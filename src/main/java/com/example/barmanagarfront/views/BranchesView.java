@@ -2,16 +2,15 @@ package com.example.barmanagarfront.views;
 
 import com.example.barmanagarfront.MainLayout;
 import com.example.barmanagarfront.events.ClosCustomerDialogEvent;
-import com.example.barmanagarfront.models.BrunchMapper.BrunchDto;
-import com.example.barmanagarfront.observers.Seat;
-import com.example.barmanagarfront.services.BrunchService;
-import com.example.barmanagarfront.views.OrderBuilderForm;
-import com.example.barmanagarfront.views.dialogs.OrderBillDialog;
+import com.example.barmanagarfront.models.BranchMapper.BranchDto;
+import com.example.barmanagarfront.services.BranchService;
+import com.example.barmanagarfront.views.dialogs.NewBranchDialog;
 import com.vaadin.flow.component.Component;
-import com.vaadin.flow.component.Text;
 import com.vaadin.flow.component.button.Button;
+import com.vaadin.flow.component.button.ButtonVariant;
+import com.vaadin.flow.component.grid.ColumnTextAlign;
 import com.vaadin.flow.component.grid.Grid;
-import com.vaadin.flow.component.html.H1;
+import com.vaadin.flow.component.html.H3;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
@@ -26,15 +25,15 @@ import java.util.List;
 public class BranchesView extends VerticalLayout
 {
 
-    private final BrunchService brunchService;
-    private Grid<BrunchDto> brunchDtoGrid;
-    private List<BrunchDto> brunchList;
-
-    public BranchesView(BrunchService brunchService)
+    private final BranchService brunchService;
+    private Grid<BranchDto> brunchDtoGrid;
+    private List<BranchDto> brunchList;
+    private Button newBranchButton,getAllEmployees;
+    public BranchesView(BranchService brunchService)
     {
         this.brunchService = brunchService;
-        brunchList = brunchService.getBrunchesDtos();
-        brunchDtoGrid = new Grid<>(BrunchDto.class,false);
+        brunchList = brunchService.getBranchesDtos();
+        brunchDtoGrid = new Grid<>(BranchDto.class,false);
 
         setupTitleSection();
 
@@ -46,7 +45,7 @@ public class BranchesView extends VerticalLayout
 
     private VerticalLayout setupTitleSection()
     {
-        final H1 title;
+        final H3 title;
         VerticalLayout headerContainer = new VerticalLayout();
 
         VerticalLayout headerTitle = new VerticalLayout();
@@ -55,41 +54,89 @@ public class BranchesView extends VerticalLayout
         headerTitle.addClassNames("mb-0", "mt-xl", "text-3xl");
         headerContainer.add(headerTitle);
 
-        title = new H1(new Text("Brunches"));
+        title = new H3("Branches");
+        title.setHeight("50px");
 
-        headerTitle.add(title);
+        HorizontalLayout newBranchLayout = new HorizontalLayout();
+        setupNewBranchButtons();
+        newBranchLayout.setAlignItems(Alignment.CENTER);
+        newBranchLayout.setJustifyContentMode(JustifyContentMode.BETWEEN);
+        newBranchLayout.add(newBranchButton,getAllEmployees);
+
+        headerTitle.add(title,newBranchLayout);
         return headerContainer;
+    }
+
+    private void setupNewBranchButtons()
+    {
+        newBranchButton = new Button("new branch");
+        newBranchButton.setIcon(VaadinIcon.HOME_O.create());
+        newBranchButton.addClickListener(buttonClickEvent -> createNewBranch());
+        newBranchButton.setIconAfterText(true);
+
+        getAllEmployees = new Button(VaadinIcon.USERS.create());
+        getAllEmployees.setIconAfterText(true);
+        getAllEmployees.setText("all employees");
+        getAllEmployees.addClickListener(buttonClickEvent -> openEmployeesView());
+    }
+
+    private void openEmployeesView()
+    {
+        getAllEmployees.getUI().ifPresent(ui -> ui.navigate(EmployeesView.class));
+    }
+
+    private void createNewBranch()
+    {
+        NewBranchDialog newBranchDialog = new NewBranchDialog(brunchService);
+        newBranchDialog.addListener(ClosCustomerDialogEvent.class,closeEvent ->{
+        newBranchDialog.close();
+        updateGrid();
+        });
+        newBranchDialog.open();
     }
 
     private void initGrid()
     {
         brunchDtoGrid.setAllRowsVisible(true);
-        brunchDtoGrid.addColumn(brunchDto -> brunchDto.getBrunchName()).setHeader("Brunch");
-        brunchDtoGrid.addColumn(brunchDto -> brunchDto.getOrderIds().size()).setHeader("Orders");
-        brunchDtoGrid.addColumn(brunchDto -> brunchDto.getEmployeesIds().size()).setHeader("Employees");
-        brunchDtoGrid.addColumn(brunchDto -> brunchDto.getTotalOrdersBill()).setHeader("profit");
-        brunchDtoGrid.addComponentColumn(brunchDto -> createButtons(brunchDto));
+        brunchDtoGrid.addColumn(brunchDto -> brunchDto.getBranchName()).setHeader("Brunch")
+                        .setTextAlign(ColumnTextAlign.CENTER);
+        brunchDtoGrid.addColumn(brunchDto -> brunchDto.getEmployeesIds().size()).setHeader("Employees")
+                        .setTextAlign(ColumnTextAlign.CENTER);
+        brunchDtoGrid.addComponentColumn(brunchDto -> createButtons(brunchDto))
+                        .setTextAlign(ColumnTextAlign.CENTER);
 
         updateGrid();
     }
 
     private void updateGrid()
     {
-        brunchDtoGrid.setItems(brunchService.getBrunchesDtos());
+        brunchDtoGrid.setItems(brunchService.getBranchesDtos());
     }
 
-    private Component createButtons(BrunchDto brunchDto)
+    private Component createButtons(BranchDto brunchDto)
     {
         Button toBrunchButton = new Button("Enter", VaadinIcon.POINTER.create());
+        toBrunchButton.addThemeVariants(ButtonVariant.LUMO_TERTIARY);
+        toBrunchButton.setIconAfterText(true);
+
         toBrunchButton.addClickListener(buttonClickEvent -> {
+            System.out.println(brunchDto.getBranchId());
             toBrunchButton.getUI().ifPresent(ui -> ui.navigate(SingleBrunchView.class,
-                    new RouteParameters("branchName",brunchDto.getBrunchName())));
-            //            seat.setSeatTaken(!seat.isSeatTaken());
+                    new RouteParameters("branchId",brunchDto.getBranchId())));
         });
 
+        Button removeButton = new Button("Remove");
+        removeButton.setIconAfterText(true);
+        removeButton.setIcon(VaadinIcon.TRASH.create());
+        removeButton.addThemeVariants(ButtonVariant.LUMO_ERROR,ButtonVariant.LUMO_TERTIARY);
+        removeButton.addClickListener(event -> {
+            brunchService.removeBranch(brunchDto.getBranchId());
+            updateGrid();
+        });
 
-        HorizontalLayout horizontalLayout = new HorizontalLayout(toBrunchButton);
+        HorizontalLayout horizontalLayout = new HorizontalLayout(toBrunchButton, removeButton);
         horizontalLayout.setJustifyContentMode(JustifyContentMode.CENTER);
+
         return horizontalLayout;
     }
 }
