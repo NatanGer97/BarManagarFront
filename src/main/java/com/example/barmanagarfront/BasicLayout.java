@@ -8,49 +8,70 @@ import com.vaadin.flow.component.applayout.AppLayout;
 import com.vaadin.flow.component.applayout.DrawerToggle;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.html.H1;
+import com.vaadin.flow.component.html.Image;
 import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.notification.NotificationVariant;
+import com.vaadin.flow.component.orderedlayout.FlexComponent;
+import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.tabs.Tab;
 import com.vaadin.flow.component.tabs.Tabs;
-import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.router.RouterLink;
+import com.vaadin.flow.server.StreamResource;
 
-
-@Route(value = "")
-@PageTitle("Main")
-public class MainLayout extends AppLayout implements IInventoryObserver
+//
+//@Route(value = "")
+//@PageTitle("Main")
+public class BasicLayout extends AppLayout implements IInventoryObserver
 {
     private final SupplierService apiDrinkService;
+    private Image titleImage;
 
-    public MainLayout(SupplierService apiDrinkService)
+    public BasicLayout(SupplierService apiDrinkService)
     {
         this.apiDrinkService = apiDrinkService;
-        DrawerToggle drawerToggle = new DrawerToggle();
+        StreamResource imageResourceForAnimation = new StreamResource("welcomeAnimation",
+                () -> getClass().getResourceAsStream("/images/bar_logo.gif"));
+        titleImage = new Image(imageResourceForAnimation, "animation");
 
-        H1 title = new H1(" Bar ");
-        title.getStyle()
-                .set("font-size", "var(--lumo-font-size-l)")
-                .set("margin", "0");
+        createHeader();
+        createDrawer();
+
+
+    }
+
+    private void createDrawer()
+    {
         Tabs tabs = getTabs();
-        Button button = new Button("Get");
-        button.addClickListener(buttonClickEvent ->
-        {
-            apiDrinkService.getDrinksCategories();
+        addToDrawer(tabs);
+    }
+
+    private void createHeader()
+    {
+        H1 title = new H1("Bar");
+
+        title.addClassNames("text-l","m-m");
+
+        Button homeButton = new Button(VaadinIcon.HOME.create());
+        homeButton.addClickListener(buttonClickEvent -> {
+            homeButton.getUI().ifPresent(ui -> ui.navigate(HomeLayout.class));
         });
 
-        addToDrawer(tabs);
-        addToNavbar(drawerToggle, title);
-        CartOfDrinksManager.getInstance().addObserver(this);
+        HorizontalLayout header = new HorizontalLayout(new DrawerToggle(),title ,homeButton);
+        header.setDefaultVerticalComponentAlignment(FlexComponent.Alignment.CENTER);
+        header.setJustifyContentMode(FlexComponent.JustifyContentMode.BETWEEN);
+        header.setWidth("100%");
+        header.addClassNames("py-0","px-m");
+        addToNavbar(header);
     }
 
     private Tabs getTabs()
     {
         Tabs tabs = new Tabs();
-        tabs.add(createTab(VaadinIcon.HOME, "Home", MainLayout.class));
+        tabs.add(createTab(VaadinIcon.HOME, "Home", HomeLayout.class));
         tabs.add(createTab(VaadinIcon.DENTAL_CHAIR, "Bar Seats", SeatView.class ));
         tabs.add(createTab(VaadinIcon.GLASS, "Bar Inventory", InventoryView.class ));
         tabs.add(createTab(VaadinIcon.WRENCH,"Manage Inventory", InventoryManagementView.class));

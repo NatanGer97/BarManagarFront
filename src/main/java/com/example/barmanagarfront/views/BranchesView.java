@@ -1,6 +1,6 @@
 package com.example.barmanagarfront.views;
 
-import com.example.barmanagarfront.MainLayout;
+import com.example.barmanagarfront.BasicLayout;
 import com.example.barmanagarfront.events.ClosCustomerDialogEvent;
 import com.example.barmanagarfront.models.BranchMapper.BranchDto;
 import com.example.barmanagarfront.services.BranchService;
@@ -11,19 +11,16 @@ import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.grid.ColumnTextAlign;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.html.H3;
-import com.vaadin.flow.component.html.Image;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.router.RouteParameters;
-import com.vaadin.flow.server.StreamResource;
-import org.springframework.core.io.ClassPathResource;
 
 import java.util.List;
 
-@Route(value = "Brunches",layout = MainLayout.class)
+@Route(value = "Brunches",layout = BasicLayout.class)
 @PageTitle("Bar | Brunches ")
 public class BranchesView extends VerticalLayout
 {
@@ -123,7 +120,7 @@ public class BranchesView extends VerticalLayout
         toBrunchButton.setIconAfterText(true);
 
         toBrunchButton.addClickListener(buttonClickEvent -> {
-            System.out.println(brunchDto.getBranchId());
+            System.out.println(brunchDto    );
             toBrunchButton.getUI().ifPresent(ui -> ui.navigate(SingleBrunchView.class,
                     new RouteParameters("branchId",brunchDto.getBranchId())));
         });

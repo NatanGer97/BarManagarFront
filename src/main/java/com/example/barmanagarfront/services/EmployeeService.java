@@ -39,7 +39,7 @@ public class EmployeeService
     public ArrayList<EmployeeDto> getAllEmployeesByBranch(String branchId)
     {
         ArrayList<EmployeeDto> employeeDtos;
-        String url = String.format("http://localhost:8080/employees/filterByBranch?brunchId=%s",branchId);
+        String url = String.format("http://localhost:8080/employees/filterByBranch?branchId=%s",branchId);
         ResponseEntity<EmployeeMapper> response = restTemplate.getForEntity(url, EmployeeMapper.class);
         try{
 

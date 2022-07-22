@@ -1,6 +1,6 @@
 package com.example.barmanagarfront.views;
 
-import com.example.barmanagarfront.MainLayout;
+import com.example.barmanagarfront.BasicLayout;
 import com.example.barmanagarfront.enums.eFilterType;
 import com.example.barmanagarfront.models.ApiDrink;
 import com.example.barmanagarfront.services.SupplierService;
@@ -16,7 +16,7 @@ import com.vaadin.flow.router.Route;
 
 import java.util.*;
 
-@Route(value = "manage_inventory",layout = MainLayout.class)
+@Route(value = "manage_inventory",layout = BasicLayout.class)
 public class InventoryManagementView extends Main implements HasComponents, HasStyle {
 
     private final Map<Tab, Component> contentMap = new HashMap<>();

@@ -1,7 +1,7 @@
 package com.example.barmanagarfront.views;
 
 
-import com.example.barmanagarfront.MainLayout;
+import com.example.barmanagarfront.BasicLayout;
 import com.example.barmanagarfront.Singeltones.CartOfDrinksManager;
 import com.example.barmanagarfront.models.BarDrink;
 import com.example.barmanagarfront.observers.IRemoveDrinkFromCartObserver;
@@ -23,7 +23,7 @@ import org.springframework.http.HttpStatus;
 
 import java.util.List;
 
-@Route(value = "Cart",layout = MainLayout.class)
+@Route(value = "Cart",layout = BasicLayout.class)
 @PageTitle("Bar | Cart of drinks")
 public class CartView extends Main implements  HasComponents, HasStyle, IRemoveDrinkFromCartObserver
 {

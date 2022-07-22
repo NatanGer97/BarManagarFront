@@ -1,6 +1,6 @@
 package com.example.barmanagarfront.views;
 
-import com.example.barmanagarfront.MainLayout;
+import com.example.barmanagarfront.BasicLayout;
 import com.example.barmanagarfront.events.ClosCustomerDialogEvent;
 import com.example.barmanagarfront.models.BarDrink;
 import com.example.barmanagarfront.models.Customer;
@@ -39,7 +39,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-@Route(value = "BuildOrder/:seat/:branchId?", layout = MainLayout.class)
+@Route(value = "BuildOrder/:seat/:branchId?", layout = BasicLayout.class)
 @PageTitle("Bar | Order Screen")
 public class OrderBuilderForm extends VerticalLayout implements BeforeEnterObserver
 {

@@ -1,6 +1,6 @@
 package com.example.barmanagarfront.views;
 
-import com.example.barmanagarfront.MainLayout;
+import com.example.barmanagarfront.BasicLayout;
 import com.example.barmanagarfront.Singeltones.SeatsManager;
 import com.example.barmanagarfront.enums.eSeatStatus;
 import com.example.barmanagarfront.events.ClosCustomerDialogEvent;
@@ -27,7 +27,7 @@ import com.vaadin.flow.router.*;
 import java.util.ArrayList;
 import java.util.List;
 
-@Route(value = "Seats",layout = MainLayout.class)
+@Route(value = "Seats",layout = BasicLayout.class)
 @PageTitle("Bar | Seats ")
 public class SeatView extends VerticalLayout implements ISeatStatusObserver
 {

@@ -1,6 +1,6 @@
 package com.example.barmanagarfront.views;
 
-import com.example.barmanagarfront.MainLayout;
+import com.example.barmanagarfront.BasicLayout;
 import com.example.barmanagarfront.events.ClosCustomerDialogEvent;
 import com.example.barmanagarfront.models.BranchMapper.BranchDto;
 import com.example.barmanagarfront.models.EmployeeMapper.EmployeeDto;
@@ -25,7 +25,7 @@ import org.slf4j.LoggerFactory;
 import java.util.ArrayList;
 import java.util.List;
 
-@Route(value = "Branches/:branchId",layout = MainLayout.class)
+@Route(value = "Branches/:branchId",layout = BasicLayout.class)
 @PageTitle("Bar | Brunch ")
 //@CssImport("frontend/themes/myapp/views/Single-Branch-View.css")
 public class SingleBrunchView extends VerticalLayout implements BeforeEnterObserver, HasComponents, HasStyle

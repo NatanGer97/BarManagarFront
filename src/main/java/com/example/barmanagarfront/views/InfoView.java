@@ -1,6 +1,6 @@
 package com.example.barmanagarfront.views;
 
-import com.example.barmanagarfront.MainLayout;
+import com.example.barmanagarfront.BasicLayout;
 import com.example.barmanagarfront.enums.eFilterType;
 import com.example.barmanagarfront.models.QueryResult;
 import com.example.barmanagarfront.services.InventoryService;
@@ -16,10 +16,8 @@ import com.vaadin.flow.router.Route;
 
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Locale;
-import java.util.Random;
 
-@Route(value = "info",layout = MainLayout.class)
+@Route(value = "info",layout = BasicLayout.class)
 public class InfoView extends Main implements  HasComponents , HasStyle {
     private final InventoryService inventoryService;
     private final OrderService orderService;

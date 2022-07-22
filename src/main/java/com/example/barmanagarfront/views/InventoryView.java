@@ -1,6 +1,6 @@
 package com.example.barmanagarfront.views;
 
-import com.example.barmanagarfront.MainLayout;
+import com.example.barmanagarfront.BasicLayout;
 import com.example.barmanagarfront.models.BarDrink;
 import com.example.barmanagarfront.observers.IRemoveFromInventoryObserver;
 import com.example.barmanagarfront.services.InventoryService;
@@ -23,7 +23,7 @@ import com.vaadin.flow.router.Route;
 
 import java.util.List;
 
-@Route(value = "Inventory", layout = MainLayout.class)
+@Route(value = "Inventory", layout = BasicLayout.class)
 @PageTitle("Bar | Cart of drinks")
 public class InventoryView extends Main implements HasComponents, HasStyle, IRemoveFromInventoryObserver
 {

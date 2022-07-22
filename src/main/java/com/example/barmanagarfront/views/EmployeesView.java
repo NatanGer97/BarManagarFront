@@ -1,6 +1,6 @@
 package com.example.barmanagarfront.views;
 
-import com.example.barmanagarfront.MainLayout;
+import com.example.barmanagarfront.BasicLayout;
 import com.example.barmanagarfront.events.ClosCustomerDialogEvent;
 import com.example.barmanagarfront.models.EmployeeMapper.EmployeeDto;
 import com.example.barmanagarfront.services.EmployeeService;
@@ -18,7 +18,7 @@ import org.apache.commons.lang3.StringUtils;
 
 import java.util.List;
 
-@Route(value = "Employees",layout = MainLayout.class)
+@Route(value = "Employees",layout = BasicLayout.class)
 @PageTitle("Employees ")
 public class EmployeesView extends VerticalLayout
 {

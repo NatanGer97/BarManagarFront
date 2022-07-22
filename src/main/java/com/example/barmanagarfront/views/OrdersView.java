@@ -1,6 +1,6 @@
 package com.example.barmanagarfront.views;
 
-import com.example.barmanagarfront.MainLayout;
+import com.example.barmanagarfront.BasicLayout;
 import com.example.barmanagarfront.models.OrderResponseObject;
 import com.example.barmanagarfront.services.OrderService;
 import com.vaadin.flow.component.grid.ColumnTextAlign;
@@ -14,13 +14,14 @@ import com.vaadin.flow.router.Route;
 
 import java.util.List;
 
-@Route(value = "Orders",layout = MainLayout.class)
+@Route(value = "Orders",layout = BasicLayout.class)
 @PageTitle("Bar | Orders ")
 public class OrdersView extends VerticalLayout
 {
     private final OrderService orderService;
     private Grid<OrderResponseObject.OrderDto> orderDtoGrid;
     private List<OrderResponseObject.OrderDto> orderDtos;
+
 
     public OrdersView(OrderService orderService)
     {
@@ -52,6 +53,7 @@ public class OrdersView extends VerticalLayout
 
         updateSeatGrid();
     }
+
 
     private String calcSum()
     {
