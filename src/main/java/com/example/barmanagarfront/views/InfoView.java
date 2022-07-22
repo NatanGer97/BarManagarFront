@@ -85,21 +85,24 @@ public class InfoView extends Main implements  HasComponents , HasStyle {
             lastYearData.add(item.getResult());
         });
 
-        BarChart currentYearBarChart = new BarChart(monthLabels, currentYearData);
-        currentYearBarChart.setName("2022");
-        currentYearBarChart.setStackName("BC");
-        BarChart lastYearBarChart = new BarChart(monthLabels, lastYearData);
-        lastYearBarChart.setName("2021");
-        lastYearBarChart.setStackName("BC");
-
-
-        XAxis xAxis = new XAxis(DataType.DATE);
+        XAxis xAxis = new XAxis(monthLabels);
         xAxis.setMinAsMinData();
         xAxis.getLabel(true).setFormatter("{MMM}");
+        YAxis currentYearYAxis = new YAxis(currentYearData);
+        YAxis lastYearYAxis = new YAxis(lastYearData);
+        BarChart currentYearBarChart = new BarChart(monthLabels, currentYearData);
+        currentYearBarChart.setName("2022");
+        BarChart lastYearBarChart = new BarChart(monthLabels, lastYearData);
+        lastYearBarChart.setName("2021");
+        lastYearBarChart.setBarGap(0);
+
+
+
 
         RectangularCoordinate coordinate =
                 new RectangularCoordinate(xAxis, new YAxis(DataType.NUMBER));
-
+        currentYearBarChart.plotOn(coordinate, xAxis, currentYearYAxis);
+        lastYearBarChart.plotOn(coordinate, xAxis, lastYearYAxis);
         coordinate.add(currentYearBarChart,lastYearBarChart);
         Toolbox toolbox = new Toolbox();
         toolbox.addButton(new Toolbox.Download());
