@@ -13,7 +13,6 @@ import com.example.barmanagarfront.services.BranchService;
 import com.example.barmanagarfront.services.OrderService;
 import com.example.barmanagarfront.views.dialogs.OrderBillDialog;
 import com.vaadin.flow.component.Component;
-import com.vaadin.flow.component.Text;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.grid.ColumnTextAlign;
 import com.vaadin.flow.component.grid.Grid;
@@ -142,8 +141,8 @@ public class SeatView extends VerticalLayout implements ISeatStatusObserver
     {
         Button openButton = new Button("Place",VaadinIcon.GLASS.create());
         openButton.setEnabled(!seat.isSeatTaken());
-        Button removeButton = new Button("Watch",VaadinIcon.GLASSES.create());
-        removeButton.setEnabled(seat.isSeatTaken());
+        Button payButton = new Button("Pay",VaadinIcon.DOLLAR.create());
+        payButton.setEnabled(seat.isSeatTaken());
 
         openButton.addClickListener(buttonClickEvent -> {
             openButton.getUI().ifPresent(ui -> ui.navigate(
@@ -153,7 +152,7 @@ public class SeatView extends VerticalLayout implements ISeatStatusObserver
             ));
         });
 
-        removeButton.addClickListener(buttonClickEvent ->
+        payButton.addClickListener(buttonClickEvent ->
         {
             OrderDto orderDto = orderService.getOrderBySeatNumber(seat.getSeatNumber());
 
@@ -168,7 +167,7 @@ public class SeatView extends VerticalLayout implements ISeatStatusObserver
         });
 
 
-        HorizontalLayout horizontalLayout = new HorizontalLayout(openButton, removeButton);
+        HorizontalLayout horizontalLayout = new HorizontalLayout(openButton, payButton);
         horizontalLayout.setJustifyContentMode(JustifyContentMode.CENTER);
         return horizontalLayout;
     }
