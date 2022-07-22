@@ -2,6 +2,7 @@ package com.example.barmanagarfront.views;
 
 import com.example.barmanagarfront.BasicLayout;
 import com.example.barmanagarfront.events.ClosCustomerDialogEvent;
+import com.example.barmanagarfront.factories.ImageFactory;
 import com.example.barmanagarfront.models.BranchMapper.BranchDto;
 import com.example.barmanagarfront.services.BranchService;
 import com.example.barmanagarfront.views.dialogs.NewBranchDialog;
@@ -10,7 +11,9 @@ import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.grid.ColumnTextAlign;
 import com.vaadin.flow.component.grid.Grid;
+import com.vaadin.flow.component.html.H1;
 import com.vaadin.flow.component.html.H3;
+import com.vaadin.flow.component.html.Image;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
@@ -20,8 +23,8 @@ import com.vaadin.flow.router.RouteParameters;
 
 import java.util.List;
 
-@Route(value = "Brunches",layout = BasicLayout.class)
-@PageTitle("Bar | Brunches ")
+@Route(value = "Branches",layout = BasicLayout.class)
+@PageTitle("Bar | Branches ")
 public class BranchesView extends VerticalLayout
 {
 
@@ -62,8 +65,11 @@ public class BranchesView extends VerticalLayout
         newBranchLayout.setAlignItems(Alignment.CENTER);
         newBranchLayout.setJustifyContentMode(JustifyContentMode.BETWEEN);
         newBranchLayout.add(newBranchButton,getAllEmployees);
-
-        headerTitle.add(title,newBranchLayout);
+        Image branchesLogoImage = ImageFactory.getInstance().getImage("branchesLogo.png");
+        Image branchesTextImage = ImageFactory.getInstance().getImage("branchesTextLogo.png");
+        branchesLogoImage.setWidth("80px");
+        branchesLogoImage.setHeight("80px");
+        headerTitle.add(new H1(branchesTextImage,branchesLogoImage),newBranchLayout);
         return headerContainer;
     }
 

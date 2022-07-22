@@ -406,7 +406,7 @@
     "@polymer/polymer": "$@polymer/polymer",
     "chokidar": "$chokidar",
     "date-fns": "$date-fns",
-    "line-awesome": "$line-awesome",
-    "echarts": "$echarts"
+    "echarts": "$echarts",
+    "line-awesome": "$line-awesome"
   }
 }

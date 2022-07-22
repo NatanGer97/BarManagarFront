@@ -4,6 +4,7 @@ import com.example.barmanagarfront.BasicLayout;
 import com.example.barmanagarfront.Singeltones.SeatsManager;
 import com.example.barmanagarfront.enums.eSeatStatus;
 import com.example.barmanagarfront.events.ClosCustomerDialogEvent;
+import com.example.barmanagarfront.factories.ImageFactory;
 import com.example.barmanagarfront.models.BranchMapper.BranchDto;
 import com.example.barmanagarfront.models.OrderResponseObject.OrderDto;
 import com.example.barmanagarfront.observers.ISeatStatusObserver;
@@ -77,9 +78,11 @@ public class SeatView extends VerticalLayout implements ISeatStatusObserver
         VerticalLayout headerTitle = new VerticalLayout();
         headerTitle.setAlignItems(FlexComponent.Alignment.CENTER);
         headerTitle.addClassNames("mb-0", "mt-xs", "text-xl");
+        Image seatsLogoImage = ImageFactory.getInstance().getImage("seatsLogo.png");
+//        H3 title = new H1(seatsLogoImage);
+        headerTitle.add(seatsLogoImage);
+//        headerTitle.add(new H3(new Text("Seats")));
         headerContainer.add(headerTitle);
-
-        headerTitle.add(new H3(new Text("Seats")));
         return headerContainer;
     }
 

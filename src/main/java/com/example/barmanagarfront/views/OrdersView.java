@@ -1,13 +1,16 @@
 package com.example.barmanagarfront.views;
 
 import com.example.barmanagarfront.BasicLayout;
+import com.example.barmanagarfront.factories.ImageFactory;
 import com.example.barmanagarfront.models.OrderResponseObject;
 import com.example.barmanagarfront.services.OrderService;
 import com.vaadin.flow.component.grid.ColumnTextAlign;
 import com.vaadin.flow.component.grid.Grid;
+import com.vaadin.flow.component.html.Image;
 import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.icon.VaadinIcon;
+import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
@@ -30,7 +33,7 @@ public class OrdersView extends VerticalLayout
         this.orderDtos = orderService.getDtoOrders();
         initGrid();
 
-        add(orderDtoGrid);
+        add(createHeader(),orderDtoGrid);
 
     }
 
@@ -54,6 +57,16 @@ public class OrdersView extends VerticalLayout
         updateSeatGrid();
     }
 
+    private VerticalLayout createHeader()
+    {
+        VerticalLayout layout = new VerticalLayout();
+        layout.setAlignItems(Alignment.CENTER);
+        layout.setJustifyContentMode(JustifyContentMode.CENTER);
+        Image image = ImageFactory.getInstance().getImage("ordersLogo.png");
+        layout.add(image);
+
+        return layout;
+    }
 
     private String calcSum()
     {

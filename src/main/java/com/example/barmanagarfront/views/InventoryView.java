@@ -1,16 +1,14 @@
 package com.example.barmanagarfront.views;
 
 import com.example.barmanagarfront.BasicLayout;
+import com.example.barmanagarfront.factories.ImageFactory;
 import com.example.barmanagarfront.models.BarDrink;
 import com.example.barmanagarfront.observers.IRemoveFromInventoryObserver;
 import com.example.barmanagarfront.services.InventoryService;
 import com.vaadin.flow.component.HasComponents;
 import com.vaadin.flow.component.HasStyle;
 import com.vaadin.flow.component.Text;
-import com.vaadin.flow.component.html.Div;
-import com.vaadin.flow.component.html.H1;
-import com.vaadin.flow.component.html.Main;
-import com.vaadin.flow.component.html.OrderedList;
+import com.vaadin.flow.component.html.*;
 import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.notification.Notification;
@@ -39,6 +37,9 @@ public class InventoryView extends Main implements HasComponents, HasStyle, IRem
         this.inventoryService = service;
         constructUI();
         displayMenuDrinks();
+
+
+
     }
 
     private void displayMenuDrinks()
@@ -74,7 +75,14 @@ public class InventoryView extends Main implements HasComponents, HasStyle, IRem
         imageContainer = new OrderedList();
         imageContainer.addClassNames("gap-m", "grid", "list-none", "m-0", "p-0");
 
-        title = new H1(new Text("Menu"));
+        Image image = ImageFactory.getInstance().getImage("cheers.png");
+        image.setWidth("75px");
+        image.setHeight("75px");
+        image.setText("Menu");
+
+        title = new H1(ImageFactory.getInstance().getImage("menuLogoBlack.png"), image);
+//        title = new H1(new Text("Menu"), image);
+//        title = new H1(new Text("Menu"));
 
         headerTitle.add(title);
         container.add(headerTitle);

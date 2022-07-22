@@ -3,6 +3,7 @@ package com.example.barmanagarfront.views;
 
 import com.example.barmanagarfront.BasicLayout;
 import com.example.barmanagarfront.Singeltones.CartOfDrinksManager;
+import com.example.barmanagarfront.factories.ImageFactory;
 import com.example.barmanagarfront.models.BarDrink;
 import com.example.barmanagarfront.observers.IRemoveDrinkFromCartObserver;
 import com.example.barmanagarfront.services.InventoryService;
@@ -10,6 +11,7 @@ import com.vaadin.flow.component.HasComponents;
 import com.vaadin.flow.component.HasStyle;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.html.H1;
+import com.vaadin.flow.component.html.Image;
 import com.vaadin.flow.component.html.Main;
 import com.vaadin.flow.component.html.OrderedList;
 import com.vaadin.flow.component.notification.Notification;
@@ -102,8 +104,11 @@ public class CartView extends Main implements  HasComponents, HasStyle, IRemoveD
 
         imageContainer = new OrderedList();
         imageContainer.addClassNames("gap-m", "grid", "list-none", "m-0", "p-0");
+        Image image = ImageFactory.getInstance().getImage("selectedDrinksLogo.png");
+//        image.setWidth("300px");
+        title = new H1(image);
 
-        title = new H1(titleMsg);
+//        title = new H1(titleMsg);
         headerTitle.add(title);
 
         container.add(headerTitle, saveButton);

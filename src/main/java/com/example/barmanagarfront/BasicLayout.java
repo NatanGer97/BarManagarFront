@@ -1,12 +1,14 @@
 package com.example.barmanagarfront;
 
 import com.example.barmanagarfront.Singeltones.CartOfDrinksManager;
+import com.example.barmanagarfront.factories.ImageFactory;
 import com.example.barmanagarfront.observers.IInventoryObserver;
 import com.example.barmanagarfront.services.SupplierService;
 import com.example.barmanagarfront.views.*;
 import com.vaadin.flow.component.applayout.AppLayout;
 import com.vaadin.flow.component.applayout.DrawerToggle;
 import com.vaadin.flow.component.button.Button;
+import com.vaadin.flow.component.dependency.CssImport;
 import com.vaadin.flow.component.html.H1;
 import com.vaadin.flow.component.html.Image;
 import com.vaadin.flow.component.html.Span;
@@ -40,6 +42,10 @@ public class BasicLayout extends AppLayout implements IInventoryObserver
         createHeader();
         createDrawer();
 
+        CartOfDrinksManager.getInstance().addObserver(this);
+
+
+
 
     }
 
@@ -47,13 +53,15 @@ public class BasicLayout extends AppLayout implements IInventoryObserver
     {
         Tabs tabs = getTabs();
         addToDrawer(tabs);
+
     }
 
     private void createHeader()
     {
-        H1 title = new H1("Bar");
+        H1 title = new H1("");
 
         title.addClassNames("text-l","m-m");
+
 
         Button homeButton = new Button(VaadinIcon.HOME.create());
         homeButton.addClickListener(buttonClickEvent -> {
@@ -65,6 +73,7 @@ public class BasicLayout extends AppLayout implements IInventoryObserver
         header.setJustifyContentMode(FlexComponent.JustifyContentMode.BETWEEN);
         header.setWidth("100%");
         header.addClassNames("py-0","px-m");
+        header.getStyle().set("background-image","linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%)");
         addToNavbar(header);
     }
 
@@ -77,7 +86,7 @@ public class BasicLayout extends AppLayout implements IInventoryObserver
         tabs.add(createTab(VaadinIcon.WRENCH,"Manage Inventory", InventoryManagementView.class));
         tabs.add(createTab(VaadinIcon.CART_O, "Added", CartView.class ));
         tabs.add(createTab(VaadinIcon.CHART, "Information", InfoView.class));
-        tabs.add(createTab(VaadinIcon.SEARCH, "OrderHistory", OrdersView.class ));
+        tabs.add(createTab(VaadinIcon.SEARCH, "Order History", OrdersView.class ));
         tabs.add(createTab(VaadinIcon.LOCATION_ARROW, "Branches View", BranchesView.class ));
 
         tabs.setOrientation(Tabs.Orientation.VERTICAL);

@@ -1,5 +1,6 @@
 package com.example.barmanagarfront.views;
 import com.example.barmanagarfront.BasicLayout;
+import com.example.barmanagarfront.factories.ImageFactory;
 import com.example.barmanagarfront.views.dialogs.AnimationDialog;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.html.H1;
@@ -16,7 +17,7 @@ import com.vaadin.flow.server.StreamResource;
 @PageTitle("Main")
 public class HomeLayout extends VerticalLayout
 {
-    Image splashImage;
+
 
     public HomeLayout()
     {
@@ -25,24 +26,19 @@ public class HomeLayout extends VerticalLayout
 
     private VerticalLayout createTitleContainer()
     {
-        StreamResource imageResourceForAnimation = new StreamResource("welcomeAnimation",
-                () -> getClass().getResourceAsStream("/images/bar_logo.gif"));
-        splashImage = new Image(imageResourceForAnimation, "animation");
-        VerticalLayout layout = new VerticalLayout(splashImage);
+
+        Image barLogoImage = ImageFactory.getInstance().getImage("bar_logo.gif");
+        VerticalLayout layout = new VerticalLayout(barLogoImage);
         layout.setJustifyContentMode(JustifyContentMode.CENTER);
         layout.setAlignItems(Alignment.CENTER);
+        Image cocktailGif = ImageFactory.getInstance().getImage("cocktailGif.gif");
+        Image helloGif = ImageFactory.getInstance().getImage("helloBot.gif");
+        HorizontalLayout animationsLayout = new HorizontalLayout();
+        animationsLayout.add(cocktailGif,helloGif);
+        layout.add(animationsLayout);
 
         return layout;
     }
 
-    private void splashScreen()
-    {
-        StreamResource imageResourceForAnimation = new StreamResource("welcomeAnimation",
-                () -> getClass().getResourceAsStream("/images/helloBot.gif"));
-        splashImage = new Image(imageResourceForAnimation, "animation");
-        AnimationDialog animationDialog = new AnimationDialog(splashImage);
-        animationDialog.open();
 
-
-    }
 }

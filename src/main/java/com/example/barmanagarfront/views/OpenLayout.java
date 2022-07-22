@@ -1,5 +1,6 @@
 package com.example.barmanagarfront.views;
 
+import com.example.barmanagarfront.factories.ImageFactory;
 import com.example.barmanagarfront.views.dialogs.AnimationDialog;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.html.H1;
@@ -23,15 +24,12 @@ public class OpenLayout extends VerticalLayout
     public OpenLayout()
     {
         this.setAlignItems(Alignment.CENTER);
-        StreamResource imageResourceForLogo = new StreamResource("logo",
-                () -> getClass().getResourceAsStream("/images/bar_logo.gif"));
-        logo = new Image(imageResourceForLogo,"bar logo");
 
-        StreamResource imageResourceForAnimation = new StreamResource("welcomeAnimation",
-                () -> getClass().getResourceAsStream("/images/helloBot.gif"));
-        image = new Image(imageResourceForAnimation, "animation");
+        logo = ImageFactory.getInstance().getImage("bar_logo.gif");
 
-        add(createHeader(),createContent(imageResourceForAnimation));
+        image = ImageFactory.getInstance().getImage("helloBot.gif");
+
+        add(createHeader(),createContent(image));
 
     }
     private HorizontalLayout createHeader()
@@ -54,7 +52,7 @@ public class OpenLayout extends VerticalLayout
     }
 
 
-    public VerticalLayout createContent(StreamResource imageResourceForAnimation){
+    public VerticalLayout createContent(Image image){
         VerticalLayout content = new VerticalLayout();
         content.setAlignItems(Alignment.CENTER);
         content.setJustifyContentMode(JustifyContentMode.CENTER);
@@ -67,7 +65,7 @@ public class OpenLayout extends VerticalLayout
             enterButton.getUI().ifPresent(ui -> ui.navigate(HomeLayout.class));
         });
 
-        content.add(enterButton,new Image(imageResourceForAnimation,""));
+        content.add(enterButton,image);
 
         return content;
 
