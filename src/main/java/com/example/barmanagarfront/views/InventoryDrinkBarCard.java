@@ -58,6 +58,8 @@ public class InventoryDrinkBarCard extends ListItem
 
 
         TextField priceSpan = createPriceField(barDrink);
+        priceSpan.setReadOnly(true);
+
 
 
         Span alcoholicBadge = createAlcoholicLabel(barDrink);
@@ -95,7 +97,8 @@ public class InventoryDrinkBarCard extends ListItem
     private TextField createPriceField(BarDrink barDrink)
     {
         TextField priceSpan = new TextField();
-        priceSpan.setValue(String.valueOf(this.barDrink.getPrice()));
+        priceSpan.setValue(String.format("%.2f",barDrink.getPrice()));
+//        priceSpan.setValue(String.valueOf(this.barDrink.getPrice()));
         priceSpan.addThemeVariants(TextFieldVariant.LUMO_ALIGN_CENTER);
         priceSpan.setSuffixComponent(VaadinIcon.MONEY.create());
         return priceSpan;
