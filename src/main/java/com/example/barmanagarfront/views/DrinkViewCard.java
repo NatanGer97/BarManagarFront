@@ -96,7 +96,7 @@ public class DrinkViewCard extends ListItem {
 
         drinkCost = new NumberField();
         drinkCost.setValue(0.0);
-        drinkCost.setStep(0.1);
+        drinkCost.setStep(0.5);
         drinkCost.setMin(0.0);
         drinkCost.setHasControls(true);
         drinkCost.addValueChangeListener(event -> {

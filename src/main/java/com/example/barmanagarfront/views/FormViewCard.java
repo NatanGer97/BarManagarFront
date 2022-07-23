@@ -30,11 +30,6 @@ public class FormViewCard extends ListItem{
         header.addClassNames("text-xl", "font-semibold");
         header.setText(name);
 
-//        Span subtitle = new Span();
-//        subtitle.addClassNames("text-s", "text-secondary");
-//        subtitle.add(new RouterLink("Open",DrinksByCategoryView.class,
-//                new RouteParameters("category",name)));
-//        subtitle.setText("14$");
 
         Paragraph description = new Paragraph();
         description.addClassName("my-m");
@@ -44,7 +39,6 @@ public class FormViewCard extends ListItem{
         badge.setText(type.name());
 
         add(header, description, badge);
-
 //        addClickListener(listItemClickEvent ->
 //        {
 //            //System.out.println(category);

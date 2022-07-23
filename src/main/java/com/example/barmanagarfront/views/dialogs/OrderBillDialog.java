@@ -128,6 +128,8 @@ public class OrderBillDialog extends Dialog
     {
         billNumberField = new NumberField();
         billNumberField.setValue(order.getOrderBill());
+        billNumberField.setReadOnly(true);
+        billNumberField.setLabel("Bill");
 
     }
 }

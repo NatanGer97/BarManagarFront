@@ -8,14 +8,19 @@ import com.example.barmanagarfront.services.OrderService;
 import com.storedobject.chart.*;
 import com.vaadin.flow.component.HasComponents;
 import com.vaadin.flow.component.HasStyle;
+import com.vaadin.flow.component.Unit;
 import com.vaadin.flow.component.button.Button;
+import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.html.Main;
+import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.router.Route;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 @Route(value = "info",layout = BasicLayout.class)
 public class InfoView extends Main implements  HasComponents , HasStyle {
@@ -23,6 +28,10 @@ public class InfoView extends Main implements  HasComponents , HasStyle {
     private final OrderService orderService;
     private HorizontalLayout buttonsLayout;
     private HorizontalLayout mainContainer;
+
+    private ComboBox<Integer> startYearComboBox;
+    private ComboBox<Integer> endYearComboBox;
+
 
     public InfoView(InventoryService inventoryService, OrderService orderService) {
         this.inventoryService = inventoryService;
@@ -51,7 +60,8 @@ public class InfoView extends Main implements  HasComponents , HasStyle {
 
         profitButton.addClickListener(buttonClickEvent -> {
             mainContainer.removeAll();
-            mainContainer.add(getProfitChart());
+            mainContainer.add(createYearPickerToolBar());
+//            mainContainer.add(getProfitChart());
         });
 
         drinkPopularityButton.addClickListener(buttonClickEvent -> {
@@ -64,7 +74,56 @@ public class InfoView extends Main implements  HasComponents , HasStyle {
         buttonsLayout.add(ingredientStatusButton, categoryStatusButton, profitButton, drinkPopularityButton);
     }
 
-    private SOChart getProfitChart() {
+    private List<Integer> creatYearRange(int start, int end)
+    {
+        List<Integer> optionalYears = IntStream.range(start, end)
+                .boxed().collect(Collectors.toList());
+
+        return optionalYears;
+    }
+
+    private HorizontalLayout createYearPickerToolBar()
+    {
+        LocalDate currentDate = LocalDate.now();
+        List<Integer> optionalYears = creatYearRange(currentDate.getYear() - 100, currentDate.getYear());
+
+        startYearComboBox = new ComboBox<>("", optionalYears);
+        startYearComboBox.setWidth(6, Unit.EM);
+
+        endYearComboBox = new ComboBox<>("");
+        endYearComboBox.setWidth(6, Unit.EM);
+        endYearComboBox.setEnabled(false);
+
+        startYearComboBox.addValueChangeListener(event -> {
+            endYearComboBox.setEnabled(true);
+            endYearComboBox.setItems(creatYearRange(event.getValue() + 1, currentDate.getYear() +1));
+        });
+
+        endYearComboBox.addValueChangeListener(event -> {
+            SOChart profitChart = getProfitChart(startYearComboBox.getValue(), endYearComboBox.getValue());
+            mainContainer.add(profitChart);
+            startYearComboBox.setEnabled(false);
+            endYearComboBox.setEnabled(false);
+        });
+
+        Button resetButton = new Button(VaadinIcon.REFRESH.create());
+        resetButton.addClickListener(buttonClickEvent -> resetYearsSelectors());
+        resetButton.setText("clear");
+        resetButton.setIconAfterText(true);
+
+
+        HorizontalLayout yearPickerLayout = new HorizontalLayout(startYearComboBox, endYearComboBox,resetButton);
+
+        return yearPickerLayout;
+    }
+    private void resetYearsSelectors()
+    {
+        mainContainer.removeAll();
+        mainContainer.add(createYearPickerToolBar());
+
+    }
+
+    private SOChart getProfitChart(int startYear, int endYear) {
         SOChart soChart = new SOChart();
         soChart.setSize("900px", "600px");
 
@@ -74,12 +133,12 @@ public class InfoView extends Main implements  HasComponents , HasStyle {
         }
         Data currentYearData = new Data();
         //TODO : Let the user pick a year
-        orderService.getProfitsByYear(2022).forEach(item -> {
+        orderService.getProfitsByYear(endYear).forEach(item -> {
             currentYearData.add(item.getResult());
         });
 
         Data lastYearData = new Data();
-        orderService.getProfitsByYear(2021).forEach(item->{
+        orderService.getProfitsByYear(startYear).forEach(item->{
             lastYearData.add(item.getResult());
         });
 
@@ -89,12 +148,10 @@ public class InfoView extends Main implements  HasComponents , HasStyle {
         YAxis currentYearYAxis = new YAxis(currentYearData);
         YAxis lastYearYAxis = new YAxis(lastYearData);
         BarChart currentYearBarChart = new BarChart(monthLabels, currentYearData);
-        currentYearBarChart.setName("2022");
+        currentYearBarChart.setName(String.valueOf(endYear));
         BarChart lastYearBarChart = new BarChart(monthLabels, lastYearData);
-        lastYearBarChart.setName("2021");
+        lastYearBarChart.setName(String.valueOf(startYear));
         lastYearBarChart.setBarGap(0);
-
-
 
 
         RectangularCoordinate coordinate =
@@ -105,7 +162,10 @@ public class InfoView extends Main implements  HasComponents , HasStyle {
         Toolbox toolbox = new Toolbox();
         toolbox.addButton(new Toolbox.Download());
 
-        soChart.add(new Title("Annual profit compared to last year"),coordinate, toolbox);
+        soChart.add(new Title(String.format("Annual profit of  %s compared to %s",startYear,endYear)),
+                coordinate, toolbox);
+//        soChart.add(new Title("Annual profit compared to last year"),coordinate, toolbox);
+
         return soChart;
     }
 

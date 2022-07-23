@@ -48,8 +48,8 @@ public class OrdersView extends VerticalLayout
                 .setHeader("Status").setTextAlign(ColumnTextAlign.CENTER);
         orderDtoGrid.addColumn(orderDto -> orderDto.getOrderDate()).setHeader("Date")
                         .setTextAlign(ColumnTextAlign.CENTER);
-        orderDtoGrid.addColumn(orderDto -> orderDto.getOrderBill()).setHeader("Bill").setSortable(true)
-                        .setTextAlign(ColumnTextAlign.CENTER).setFooter(calcSum());
+        orderDtoGrid.addColumn(orderDto -> String.format("%.2f",orderDto.getOrderBill()))
+                .setHeader("Bill").setSortable(true).setTextAlign(ColumnTextAlign.CENTER).setFooter(calcSum());
 
 
 
