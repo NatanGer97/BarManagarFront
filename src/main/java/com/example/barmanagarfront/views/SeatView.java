@@ -139,13 +139,15 @@ public class SeatView extends VerticalLayout implements ISeatStatusObserver
 
     private Component createButtons(Seat seat)
     {
-        Button openButton = new Button("Place",VaadinIcon.GLASS.create());
-        openButton.setEnabled(!seat.isSeatTaken());
+        Button placeButton = new Button("Place",VaadinIcon.GLASS.create());
+        placeButton.setEnabled(!seat.isSeatTaken());
+        placeButton.setIconAfterText(true);
         Button payButton = new Button("Pay",VaadinIcon.DOLLAR.create());
         payButton.setEnabled(seat.isSeatTaken());
+        payButton.setIconAfterText(true);
 
-        openButton.addClickListener(buttonClickEvent -> {
-            openButton.getUI().ifPresent(ui -> ui.navigate(
+        placeButton.addClickListener(buttonClickEvent -> {
+            placeButton.getUI().ifPresent(ui -> ui.navigate(
                     OrderBuilderForm.class,
                     new RouteParameters(new RouteParam("seat", String.valueOf(seat.getSeatNumber())))
 
@@ -167,7 +169,7 @@ public class SeatView extends VerticalLayout implements ISeatStatusObserver
         });
 
 
-        HorizontalLayout horizontalLayout = new HorizontalLayout(openButton, payButton);
+        HorizontalLayout horizontalLayout = new HorizontalLayout(placeButton, payButton);
         horizontalLayout.setJustifyContentMode(JustifyContentMode.CENTER);
         return horizontalLayout;
     }
